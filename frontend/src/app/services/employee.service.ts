@@ -1,21 +1,20 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
-import {Customer} from '../domain/Customer';
+import {HttpClient} from '@angular/common/http';
+import {Employee} from '../domain/Employee';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class CustomerService {
+@Injectable({providedIn: 'root'})
+export class EmployeeService {
+
   constructor(private http: HttpClient) {
   }
 
-  public getAllCustomers(): Observable<Customer[]> {
+  public getAllEmployees(): Observable<Employee[]> {
 
     return this.http
-      .get<Customer[]>('/api/customers')
-      .pipe(catchError(this.handleError('getAllCustomers', [])));
+      .get<Employee[]>('/api/employees')
+      .pipe(catchError(this.handleError('getAllEmployees', [])));
 
   }
 
@@ -41,5 +40,11 @@ export class CustomerService {
 
   private log(s: string) {
     console.log(`${this}: ${s}`);
+  }
+
+  getEmployee(id: string): Observable<Employee> {
+    return this.http
+      .get<Employee>(`/api/employee/${id}`)
+      .pipe(catchError(this.handleError('getEmployee', null)));
   }
 }
