@@ -10,13 +10,13 @@ import { Filter } from '../domain/Filter';
 export class EmployeeService {
   private teams: Array<Team> = [{
     employees: [
-      { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo', isAvailable: false, role: 'test', unit: 'test', skills: ['a'], groups: ['a'] },
-      { firstName: 'Max', lastName: 'Mustermann', id: 1, code: 'jdo', isAvailable: false, role: 'test', unit: 'test', skills: ['a'], groups: ['a'] }
+      { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo', isAvailable: false, role: 'test', unit: 'test', skills: ['a'], groups: ['a'], location: '', jobProfile: { name: '' } },
+      { firstName: 'Max', lastName: 'Mustermann', id: 1, code: 'jdo', isAvailable: false, role: 'test', unit: 'test', skills: ['a'], groups: ['a'], location: '', jobProfile: { name: '' } }
     ]
   }, {
     employees: [
-      { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo', isAvailable: false, role: 'test', unit: 'test', skills: ['a'], groups: ['a'] },
-      { firstName: 'Max', lastName: 'Mustermann', id: 1, code: 'jdo', isAvailable: false, role: 'test', unit: 'test', skills: ['a'], groups: ['a'] }
+      { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo', isAvailable: false, role: 'test', unit: 'test', skills: ['a'], groups: ['a'], location: '', jobProfile: { name: '' } },
+      { firstName: 'Max', lastName: 'Mustermann', id: 1, code: 'jdo', isAvailable: false, role: 'test', unit: 'test', skills: ['a'], groups: ['a'], location: '', jobProfile: { name: '' } }
     ]
   }];
 
