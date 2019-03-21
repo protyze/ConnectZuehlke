@@ -1,0 +1,14 @@
+<mat-card class="w-100">
+  <mat-card-title class="text-truncate">{{employee.firstName}} {{employee.lastName}}</mat-card-title>
+  <app-employee-image [employeeId]="employee.id"></app-employee-image>
+  <mat-card-content>
+    <div class="row mt-3">
+      <div class="col"><strong>Job</strong></div>
+      <div class="col">{{employee.job}}</div>
+    </div>
+    <div class="row">
+      <div class="col"><strong>Available</strong></div>
+      <div class="col">{{employee.available ? "Yes" : "No"}}</div>
+    </div>
+  </mat-card-content>
+</mat-card>

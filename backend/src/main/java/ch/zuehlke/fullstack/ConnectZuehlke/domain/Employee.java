@@ -12,7 +12,7 @@ public class Employee {
     private Employee() {
     }
 
-    public Employee(String firstName, String lastName, int id) {
+    public Employee(int id, String firstName, String lastName) {
         this(firstName, lastName, id, firstName.substring(0, 1) + lastName.substring(0, 2), "Test", new JobProfile("TestProfile"));
     }
 

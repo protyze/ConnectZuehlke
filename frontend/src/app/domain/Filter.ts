@@ -1,4 +1,6 @@
 export class Filter {
-  numberOfEmployees = 5;
   skills: Array<string> = [];
+
+  constructor(public numberOfEmployees = 5) {
+  }
 }

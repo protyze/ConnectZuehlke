@@ -17,16 +17,10 @@
         </p>
       </td>
       <td>
-        <!--<p>-->
-          <img src="http://localhost:8080/api/employee/{{employee.id}}/picture" style="width:100px">
-        <!--</p>-->
+        <app-employee-image [employeeId]="employee.id" [size]="100"></app-employee-image>
       </td>
     </tr>
   </table>
-  <div>
-
-
-
-
-  </div>
 </div>
+
+<relation-wheel></relation-wheel>
