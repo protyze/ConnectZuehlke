@@ -34,7 +34,7 @@ public class ATeamService {
         allScores = combineValues(allScores, aTeamsByZuehlkeTeam);
 
         ArrayList<ATeam> aTeams = new ArrayList<>();
-        while (!allScores.isEmpty() && aTeams.size() <= 3) {
+        while (!allScores.isEmpty() && aTeams.size() <= 4) {
             ATeamPair pairWithHighestScore = findPairWithHighestScore(allScores);
             allScores.remove(pairWithHighestScore);
 
@@ -43,6 +43,9 @@ public class ATeamService {
             aTeamMembers.add(new ATeamMember(pairWithHighestScore.getE2()));
             int newNumberOfTeamMembers = nrOfTeamMembers - 2;
 
+            if (newNumberOfTeamMembers <= 0) {
+                break;
+            }
             List<ATeamMember> aTeamMembers1 = new ArrayList<>();
             getNextTeamMember(allScores, aTeamMembers1, pairWithHighestScore.getE1(), newNumberOfTeamMembers);
             aTeamMembers.addAll(aTeamMembers1);
