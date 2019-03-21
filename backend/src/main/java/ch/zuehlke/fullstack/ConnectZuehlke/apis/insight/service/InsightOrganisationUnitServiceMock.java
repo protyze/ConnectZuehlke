@@ -29,7 +29,7 @@ public class InsightOrganisationUnitServiceMock implements InsightOrganisationUn
     }
 
     @Override
-    public List<Employee> getParticipantsInFocusGroup(String focusGroupId) {
+    public List<Employee> getParticipantsInOrganisationUnit(String focusGroupId) {
 
         return null;
     }
