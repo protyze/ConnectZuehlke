@@ -1,3 +1,7 @@
+class jobProfile {
+  name: string;
+}
+
 export interface Employee {
   firstName: string;
   lastName: string;
@@ -6,6 +10,8 @@ export interface Employee {
   isAvailable: boolean;
   role: string;
   unit: string;
+  location: string;
   skills: Array<string>;
   groups: Array<string>;
+  jobProfile: jobProfile;
 }

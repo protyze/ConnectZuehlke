@@ -1,6 +1,7 @@
 package ch.zuehlke.fullstack.ConnectZuehlke.apis.insight.service;
 
 import ch.zuehlke.fullstack.ConnectZuehlke.domain.Employee;
+import ch.zuehlke.fullstack.ConnectZuehlke.domain.JobProfile;
 import org.apache.commons.io.IOUtils;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
@@ -16,9 +17,7 @@ import static java.util.Arrays.asList;
 public class InsightEmployeeServiceMocked implements InsightEmployeeService {
 
     public static final List<Employee> EMPLOYEES = asList(
-            new Employee("Klaus", "Mustermann", 1, "kmu"),
-            new Employee("Magda", "Müller", 2, "mmu"),
-            new Employee("Kurt", "Peters", 3, "kpe")
+            new Employee("Klaus", "Mustermann", 1, "kmu", "Test", new JobProfile("TestProfile"))
     );
 
     public List<Employee> getEmployees() {

@@ -12,12 +12,14 @@ import {EmployeeService} from '../services/employee.service';
 })
 export class EmployeeDetailComponent implements OnInit {
   employee$: Observable<Employee>;
+  code: string;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private service: EmployeeService,
   ) {
+      this.code = this.route.snapshot.paramMap.get("code");
   }
 
   ngOnInit() {

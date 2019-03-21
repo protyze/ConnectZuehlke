@@ -6,19 +6,23 @@ public class Employee {
     private String lastName;
     private int id;
     private String code;
+    private String location;
+    private JobProfile jobProfile;
 
     private Employee() {
     }
 
     public Employee(String firstName, String lastName, int id) {
-        this(firstName, lastName, id, firstName.substring(0, 1) + lastName.substring(0, 2));
+        this(firstName, lastName, id, firstName.substring(0, 1) + lastName.substring(0, 2), "Test", new JobProfile("TestProfile"));
     }
 
-    public Employee(String firstName, String lastName, int id, String code) {
+    public Employee(String firstName, String lastName, int id, String code, String location, JobProfile jobProfile) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.id = id;
         this.code = code.toLowerCase();
+        this.location = location;
+        this.jobProfile = jobProfile;
     }
 
     public String getLastName() {
@@ -37,4 +41,11 @@ public class Employee {
         return code;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public JobProfile getJobProfile() {
+        return jobProfile;
+    }
 }

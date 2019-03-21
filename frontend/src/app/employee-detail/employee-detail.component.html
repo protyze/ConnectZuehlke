@@ -1,6 +1,32 @@
 <div *ngIf="employee$ | async as employee">
   <h3>{{ employee.firstName}} {{ employee.lastName}}</h3>
+  <table>
+    <tr>
+      <td>
+        <p>
+          <label>Kürzel: </label>{{ employee.code }}
+        </p>
+        <p>
+          <label>Id: </label>{{ employee.id }}
+        </p>
+        <p>
+          <label>Position: </label>{{ employee.jobProfile.name }}
+        </p>
+        <p>
+          <label>Location: </label>{{ employee.location}}
+        </p>
+      </td>
+      <td>
+        <!--<p>-->
+          <img src="http://localhost:8080/api/employee/{{employee.id}}/picture" style="width:100px">
+        <!--</p>-->
+      </td>
+    </tr>
+  </table>
   <div>
-    <label>Id: </label>{{ employee.id }}
+
+
+
+
   </div>
 </div>
