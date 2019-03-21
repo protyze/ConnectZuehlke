@@ -9,3 +9,5 @@
 /build
 /out
 .idea
+
+**/application*.properties

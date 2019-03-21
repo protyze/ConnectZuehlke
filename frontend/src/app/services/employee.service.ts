@@ -1,13 +1,29 @@
-import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
-import {catchError} from 'rxjs/operators';
-import {HttpClient} from '@angular/common/http';
-import {Employee} from './domain/Employee';
+import { Injectable } from '@angular/core';
+import { Observable, of, Subject } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Employee } from '../domain/Employee';
+import { Team } from '../domain/Team';
+import { Filter } from '../domain/Filter';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class EmployeeService {
+  private teams: Array<Team> = [];
+
+  teamsFetched = new Subject<void>();
 
   constructor(private http: HttpClient) {
+  }
+
+  public fetchTeams(filters: Filter) {
+    // API Request to get Teams
+    // Notify Subscribers about updated Teams!
+    console.error('Not implemented');
+    this.teamsFetched.next();
+  }
+
+  public getTeams() {
+    return this.teams;
   }
 
   public getAllEmployees(): Observable<Employee[]> {
