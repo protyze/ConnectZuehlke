@@ -6,7 +6,7 @@
   </div>
   <div class="row">
     <div class="col">
-      <app-filters [selectedFilters]="filters"></app-filters>
+      <app-filters [selectedFilters]="filters" (filtersChanged)="onFilterChanged($event)"></app-filters>
     </div>
   </div>
   <div class="row">

@@ -28,7 +28,6 @@ export class TeamGeneratorComponent implements OnInit, OnDestroy {
 
   onFilterChanged(filters: Filter) {
     this.filters = filters;
-    // TODO: API Request
     this.employeeService.fetchTeams(filters);
   }
 

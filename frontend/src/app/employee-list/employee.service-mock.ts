@@ -1,9 +1,9 @@
-import {Observable, of} from 'rxjs';
-import {Employee} from '../domain/Employee';
+import { Observable, of } from 'rxjs';
+import { Employee } from '../domain/Employee';
 
 export const EMPLOYEES: Employee[] = [
-  {firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo'},
-  {firstName: 'Max', lastName: 'Mustermann', id: 2, code: 'mmu'},
+  { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo', isAvailable: false, role: 'test', unit: 'test', skills: ['a'], groups: ['a'] },
+  { firstName: 'Max', lastName: 'Mustermann', id: 1, code: 'jdo', isAvailable: false, role: 'test', unit: 'test', skills: ['a'], groups: ['a'] }
 ];
 
 export class EmployeeServiceMock {
