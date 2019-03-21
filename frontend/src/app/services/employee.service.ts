@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Employee } from '../domain/Employee';
 import { Team } from '../domain/Team';
 import { Filter } from '../domain/Filter';
@@ -35,7 +35,11 @@ export class EmployeeService {
 
   public fetchTeams(filters: Filter) {
     this.http
-      .get('/api/ateams')
+      .get('/api/ateams', {
+        params: new HttpParams()
+          .set('nE', filters.numberOfEmployees.toString())
+          .set('skills', filters.skills.map(skill => skill.name).join())
+      })
       .subscribe((data: Team[]) => {
         this.teams = data;
         this.teamsFetched.next();

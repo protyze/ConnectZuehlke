@@ -3,19 +3,21 @@ import { Subject } from 'rxjs';
 
 import { HttpClient } from '@angular/common/http';
 
+import { Capability } from '../domain/Capabilities';
+
 @Injectable({
   providedIn: 'root'
 })
 export class CapabilitiesService {
-  private capabilities: Array<string> = ['Development', 'Java', 'Whatever'];
+  private capabilities: Array<Capability> = [];
 
   capabilitiesFetched = new Subject<void>();
 
   constructor(private http: HttpClient) { }
 
   public fetchCapabilities() {
-    this.http.get('api/capabilities').subscribe((data: Array<{ id: number, name: string }>) => {
-      this.capabilities = data.map(capability => capability.name);
+    this.http.get('api/capabilities').subscribe((data: Array<Capability>) => {
+      this.capabilities = data;
       this.capabilitiesFetched.next();
     });
   }

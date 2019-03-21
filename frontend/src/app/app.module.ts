@@ -29,6 +29,7 @@ import {
   MatGridListModule,
   MatButtonToggleModule
 } from '@angular/material';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { NavigationComponent } from './navigation/navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { SidebarComponent } from './navigation/sidebar/sidebar.component';
@@ -91,7 +92,8 @@ library.add(faAngular);
     MatListModule,
     MatGridListModule,
     MatButtonToggleModule,
-    AgmCoreModule.forRoot({ apiKey: 'AIzaSyBrgp24CvFV3M0PZGByVDVEG0qn56k8Y-g' })
+    AgmCoreModule.forRoot({ apiKey: 'AIzaSyBrgp24CvFV3M0PZGByVDVEG0qn56k8Y-g' }),
+    NgMultiSelectDropDownModule.forRoot()
   ],
   providers: [
     {
