@@ -22,6 +22,7 @@ public class CustomerDto {
     private Double longitude;
     @JsonProperty("Latitude")
     private Double latitude;
+    //test
 
 
     public Integer getId() {
