@@ -14,16 +14,16 @@ export class EmployeeService {
       value: 1
     },
     teamMembers: [
-      { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo', available: false },
-      { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo', available: false }
+      { employee: { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo' }, available: false },
+      { employee: { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo' }, available: false }
     ]
   }, {
     score: {
       value: 1
     },
     teamMembers: [
-      { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo', available: false },
-      { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo', available: false }
+      { employee: { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo' }, available: false },
+      { employee: { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo' }, available: false }
     ]
   }];
 

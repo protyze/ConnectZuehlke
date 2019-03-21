@@ -2,17 +2,21 @@ class jobProfile {
   name: string;
 }
 
-export interface Employee {
+class EmployeeProfile {
   firstName: string;
   lastName: string;
   id: number;
   code: string;
+  location?: string;
+  jobProfile?: jobProfile;
+}
+
+export interface Employee {
+  employee: EmployeeProfile;
   available: boolean;
   job?: string;
   grade?: string;
   unit?: string;
-  location?: string;
   skills?: Array<string>;
   focusGroups?: Array<string>;
-  jobProfile?: jobProfile;
 }

@@ -45,6 +45,7 @@ import { TeamComponent } from './team/team.component';
 import { TeamMemberComponent } from './team-member/team-member.component';
 import { EmployeeImageComponent } from './employee-image/employee-image.component';
 import { RelationWheelComponent } from './chart/relation-wheel/relation-wheel/relation-wheel.component';
+import { ATeamAudioComponent } from './a-team-audio/a-team-audio.component';
 
 // For more icons, please checkout https://fontawesome.com/icons?d=gallery
 library.add(faHeart);
@@ -69,7 +70,8 @@ library.add(faAngular);
     RelationWheelComponent,
     TeamComponent,
     TeamMemberComponent,
-    EmployeeImageComponent
+    EmployeeImageComponent,
+    ATeamAudioComponent
   ],
   imports: [
     BrowserModule,
