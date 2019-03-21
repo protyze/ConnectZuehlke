@@ -6,7 +6,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Employee } from '../domain/Employee';
 import { Team } from '../domain/Team';
 import { Filter } from '../domain/Filter';
-import {RelationshipData} from "../domain/wheel-chart";
+import { RelationshipData } from "../domain/wheel-chart";
 
 @Injectable({ providedIn: 'root' })
 export class EmployeeService {
@@ -43,7 +43,7 @@ export class EmployeeService {
     this.http
       .get('/api/ateams', {
         params: new HttpParams()
-          .set('nE', filters.numberOfEmployees.toString())
+          .set('nrOfTeamMembers', filters.numberOfEmployees.toString())
           .set('skills', filters.skills.map(skill => skill.name).join())
       })
       .subscribe((data: Team[]) => {
