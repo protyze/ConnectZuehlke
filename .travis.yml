@@ -30,3 +30,4 @@ script:
 - ./gradlew :backend:bootJar
 - ./startServer.sh 0.0.1
 - ./gradlew :frontend:e2e
+
