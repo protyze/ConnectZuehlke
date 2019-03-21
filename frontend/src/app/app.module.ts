@@ -25,7 +25,7 @@ import {
   MatSidenavModule,
   MatSnackBarModule,
   MatToolbarModule,
-  MatCardModule
+  MatCardModule,
 } from '@angular/material';
 import { NavigationComponent } from './navigation/navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -38,6 +38,7 @@ import { ErrorRequestInterceptor } from './common/error-request-interceptor';
 import { FiltersComponent } from './filters/filters.component';
 import { TeamListComponent } from './team-list/team-list.component';
 import { TeamComponent } from './team/team.component';
+import { RelationWheelComponent } from './chart/relation-wheel/relation-wheel/relation-wheel.component';
 
 // For more icons, please checkout https://fontawesome.com/icons?d=gallery
 library.add(faHeart);
@@ -58,7 +59,8 @@ library.add(faAngular);
     TeamGeneratorComponent,
     FiltersComponent,
     TeamListComponent,
-    TeamComponent
+    TeamComponent,
+    RelationWheelComponent
   ],
   imports: [
     BrowserModule,
