@@ -18,12 +18,12 @@ export class TeamGeneratorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.employeeService.fetchTeams(this.filters);
     this.employeeService
       .teamsFetched
       .subscribe(() => {
         this.getTeams();
       });
+    this.employeeService.fetchTeams(this.filters);
   }
 
   onFilterChanged(filters: Filter) {

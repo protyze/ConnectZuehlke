@@ -8,7 +8,17 @@ import { Filter } from '../domain/Filter';
 
 @Injectable({ providedIn: 'root' })
 export class EmployeeService {
-  private teams: Array<Team> = [];
+  private teams: Array<Team> = [{
+    employees: [
+      { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo', isAvailable: false, role: 'test', unit: 'test', skills: ['a'], groups: ['a'] },
+      { firstName: 'Max', lastName: 'Mustermann', id: 1, code: 'jdo', isAvailable: false, role: 'test', unit: 'test', skills: ['a'], groups: ['a'] }
+    ]
+  }, {
+    employees: [
+      { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo', isAvailable: false, role: 'test', unit: 'test', skills: ['a'], groups: ['a'] },
+      { firstName: 'Max', lastName: 'Mustermann', id: 1, code: 'jdo', isAvailable: false, role: 'test', unit: 'test', skills: ['a'], groups: ['a'] }
+    ]
+  }];
 
   teamsFetched = new Subject<void>();
 
