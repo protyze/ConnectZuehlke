@@ -1,9 +1,9 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import {Filter} from '../domain/Filter';
+import { Filter } from '../domain/Filter';
 
-import {EmployeeService} from '../services/employee.service';
-import {Team} from '../domain/Team';
+import { EmployeeService } from '../services/employee.service';
+import { Team } from '../domain/Team';
 
 @Component({
   selector: 'app-team-generator',
@@ -11,13 +11,14 @@ import {Team} from '../domain/Team';
   styleUrls: ['./team-generator.component.scss']
 })
 export class TeamGeneratorComponent implements OnInit, OnDestroy {
-  private filters: Filter;
-  private teamResults: Array<Team> = [];
+  filters: Filter;
+  teamsResults: Array<Team> = [];
 
   constructor(private employeeService: EmployeeService) {
   }
 
   ngOnInit() {
+    this.employeeService.fetchTeams(this.filters);
     this.employeeService
       .teamsFetched
       .subscribe(() => {
@@ -32,7 +33,7 @@ export class TeamGeneratorComponent implements OnInit, OnDestroy {
   }
 
   getTeams() {
-    this.teamResults = this.employeeService.getTeams();
+    this.teamsResults = this.employeeService.getTeams();
   }
 
   ngOnDestroy() {

@@ -1,3 +1,7 @@
-<p>
-  team-list works!
-</p>
+<div>
+  <ul>
+    <li *ngFor="let team of teamsResults">
+      <app-team [team]="team"></app-team>
+    </li>
+  </ul>
+</div>

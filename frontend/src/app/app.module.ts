@@ -36,6 +36,7 @@ import { AgmCoreModule } from '@agm/core';
 import { ErrorRequestInterceptor } from './common/error-request-interceptor';
 import { FiltersComponent } from './filters/filters.component';
 import { TeamListComponent } from './team-list/team-list.component';
+import { TeamComponent } from './team/team.component';
 
 // For more icons, please checkout https://fontawesome.com/icons?d=gallery
 library.add(faHeart);
@@ -55,7 +56,8 @@ library.add(faAngular);
     EmployeeDetailComponent,
     TeamGeneratorComponent,
     FiltersComponent,
-    TeamListComponent
+    TeamListComponent,
+    TeamComponent
   ],
   imports: [
     BrowserModule,
