@@ -13,7 +13,7 @@ import { Team } from '../domain/Team';
 export class TeamGeneratorComponent implements OnInit, OnDestroy {
   filters = new Filter(7);
   teamsResults: Array<Team> = [];
-  isLoading: false;
+  isLoading = false;
 
   constructor(private employeeService: EmployeeService) {
   }
