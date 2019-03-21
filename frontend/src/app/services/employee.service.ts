@@ -6,6 +6,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Employee } from '../domain/Employee';
 import { Team } from '../domain/Team';
 import { Filter } from '../domain/Filter';
+import {RelationshipData} from "../domain/wheel-chart";
 
 @Injectable({ providedIn: 'root' })
 export class EmployeeService {
@@ -95,6 +96,12 @@ export class EmployeeService {
     return this.http
       .get<Employee>(`/api/employee/${id}`)
       .pipe(catchError(this.handleError('getEmployee', null)));
+  }
+
+  getRelationshipData(): Observable<RelationshipData> {
+    return this.http
+      .get<RelationshipData>(`/api/employee/relations`)
+      .pipe(catchError(this.handleError('getRelationshipData', null)));
   }
 
   startLoading() {
