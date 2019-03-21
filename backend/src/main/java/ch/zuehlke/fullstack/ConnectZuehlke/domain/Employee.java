@@ -1,5 +1,7 @@
 package ch.zuehlke.fullstack.ConnectZuehlke.domain;
 
+import java.util.Objects;
+
 import java.time.LocalDate;
 
 public class Employee {
@@ -55,5 +57,27 @@ public class Employee {
 
     public LocalDate getEntryDate() {
         return entryDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return id == employee.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", id=" + id +
+                '}';
     }
 }

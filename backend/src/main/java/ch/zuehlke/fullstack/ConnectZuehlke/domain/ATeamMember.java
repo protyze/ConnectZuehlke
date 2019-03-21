@@ -1,6 +1,7 @@
 package ch.zuehlke.fullstack.ConnectZuehlke.domain;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ATeamMember {
     private final Employee employee;
@@ -23,6 +24,11 @@ public class ATeamMember {
         this.skills = skills;
         this.zuehlkeTeam = zuehlkeTeam;
         this.focusGroups = focusGroups;
+    }
+
+    public ATeamMember(Employee employee) {
+
+        this.employee = employee;
     }
 
     public boolean isAvailable() {
@@ -51,5 +57,25 @@ public class ATeamMember {
 
     public Employee getEmployee() {
         return employee;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ATeamMember that = (ATeamMember) o;
+        return Objects.equals(employee, that.employee);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(employee);
+    }
+
+    @Override
+    public String toString() {
+        return "ATeamMember{" +
+                "employee=" + employee +
+                '}';
     }
 }
