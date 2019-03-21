@@ -3,6 +3,7 @@ package ch.zuehlke.fullstack.ConnectZuehlke.rest;
 
 import ch.zuehlke.fullstack.ConnectZuehlke.apis.insight.service.InsightEmployeeService;
 import ch.zuehlke.fullstack.ConnectZuehlke.domain.Employee;
+import ch.zuehlke.fullstack.ConnectZuehlke.domain.RelationshipData;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,4 +38,11 @@ public class EmployeeRestController {
     byte[] getEmployeePicture(@PathVariable(value = "id") int id) throws IOException {
         return employeeService.getEmployeePicture(id);
     }
+
+    @GetMapping(value = "/api/employee/relations")
+    public @ResponseBody
+    RelationshipData getRelationshipData() {
+        return employeeService.getRelationshipData();
+    }
+
 }

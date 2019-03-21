@@ -1,5 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import * as go from "gojs";
+import {EmployeeNode, EmployeeRelationship, RelationshipData} from "../../../domain/wheel-chart";
+import {EmployeeService} from "../../../services/employee.service";
 
 @Component({
   selector: 'relation-wheel',
@@ -11,16 +13,23 @@ export class RelationWheelComponent implements OnInit {
   @ViewChild('myDiagramDiv')
   element: ElementRef;
 
-  constructor() { }
+  relationshipData: RelationshipData;
+
+  constructor(private service: EmployeeService) {
+  }
 
   ngOnInit() {
+    this.service.getRelationshipData().subscribe((data: RelationshipData) => {
+      this.relationshipData = data;
+      this.renderGraph(this.relationshipData);
+    });
   }
 
   ngAfterViewInit() {
-    this.renderGraph();
+    // this.renderGraph(this.relationshipData);
   }
 
-  renderGraph(): void {
+  renderGraph(repationshipData: RelationshipData): void {
     function WheelLayout() {
       go.CircularLayout.call(this);
     }
@@ -76,9 +85,6 @@ export class RelationWheelComponent implements OnInit {
     var myDiagram;
 
     function init(element: ElementRef) {
-      // if (window.goSamples) {
-      // goSamples();
-      // }init for these samples -- you don't need to call this
       let $: any = go.GraphObject.make;  // for conciseness in defining templates
 
       myDiagram = $(go.Diagram, element /*document.querySelector('#myDiagramDiv')*/ , // must be the ID or reference to div
@@ -173,7 +179,7 @@ export class RelationWheelComponent implements OnInit {
     }
 
     function generateGraph() {
-      var names = [
+     /* var names = [
         "Joshua", "Daniel", "Robert", "Noah", "Anthony",
         "Elizabeth", "Addison", "Alexis", "Ella", "Samantha",
         "Joseph", "Scott", "James", "Ryan", "Benjamin",
@@ -189,11 +195,7 @@ export class RelationWheelComponent implements OnInit {
       ];
 
       var nodeDataArray = names.map( (name, index) => {
-        return {
-          key: index,
-          text: name,
-          color: go.Brush.randomColor(128, 240)
-        }
+        return new EmployeeNode(index, name, go.Brush.randomColor(128, 240))
       });
 
 
@@ -202,13 +204,14 @@ export class RelationWheelComponent implements OnInit {
       for (let i = 0; i < num * 2; i++) {
         let a = Math.floor(Math.random() * num);
         let b = Math.floor(Math.random() * num / 4) + 1;
-        linkDataArray.push({ from: a, to: (a + b) % num, color: go.Brush.randomColor(0, 127) });
+        linkDataArray.push(
+          new EmployeeRelationship(a, (a + b) % num, go.Brush.randomColor(0, 127))
+        );
       }
-
-      console.log('nodeDataArray', nodeDataArray);
-      console.log('linkDataArray', linkDataArray);
-
-      myDiagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
+*/
+      myDiagram.model = new go.GraphLinksModel(
+        repationshipData.employeeNodes,
+        repationshipData.employeeRelations);
     }
     init(this.element.nativeElement);
   }
