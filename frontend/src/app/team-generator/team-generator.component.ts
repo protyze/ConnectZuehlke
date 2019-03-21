@@ -13,17 +13,22 @@ import { Team } from '../domain/Team';
 export class TeamGeneratorComponent implements OnInit, OnDestroy {
   filters = new Filter(7);
   teamsResults: Array<Team> = [];
+  isLoading: false;
 
   constructor(private employeeService: EmployeeService) {
   }
 
   ngOnInit() {
     this.getTeams();
+    this.getLoadingState();
     this.employeeService
       .teamsFetched
       .subscribe(() => {
         this.getTeams();
       });
+    this.employeeService.loadingChanged.subscribe(() => {
+      this.getLoadingState();
+    })
     this.employeeService.fetchTeams(this.filters);
   }
 
@@ -36,7 +41,12 @@ export class TeamGeneratorComponent implements OnInit, OnDestroy {
     this.teamsResults = this.employeeService.getTeams();
   }
 
+  getLoadingState() {
+    this.isLoading = this.employeeService.isLoading();
+  }
+
   ngOnDestroy() {
     this.employeeService.teamsFetched.unsubscribe();
+    this.employeeService.loadingChanged.unsubscribe();
   }
 }

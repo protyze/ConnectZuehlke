@@ -9,6 +9,11 @@
       <app-filters [selectedFilters]="filters" (filtersChanged)="onFilterChanged($event)"></app-filters>
     </div>
   </div>
+  <div class="row fixed-top" *ngIf="isLoading">
+    <div class="col">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+  </div>
   <div class="row">
     <div class="col">
       <app-team-list [teamsResults]="teamsResults"></app-team-list>

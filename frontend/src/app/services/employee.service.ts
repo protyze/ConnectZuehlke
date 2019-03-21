@@ -27,13 +27,18 @@ export class EmployeeService {
     ]
   }];
 
+  private loading = false;
+
   teamsFetched = new Subject<void>();
+  loadingChanged = new Subject<void>();
+
 
   constructor(private http: HttpClient) {
 
   }
 
   public fetchTeams(filters: Filter) {
+    this.startLoading();
     this.http
       .get('/api/ateams', {
         params: new HttpParams()
@@ -43,11 +48,15 @@ export class EmployeeService {
       .subscribe((data: Team[]) => {
         this.teams = data;
         this.teamsFetched.next();
-      });
+      }, this.finishedLoading.bind(this), this.finishedLoading.bind(this));
   }
 
   public getTeams() {
     return this.teams;
+  }
+
+  public isLoading() {
+    return this.loading;
   }
 
   public getAllEmployees(): Observable<Employee[]> {
@@ -86,5 +95,18 @@ export class EmployeeService {
     return this.http
       .get<Employee>(`/api/employee/${id}`)
       .pipe(catchError(this.handleError('getEmployee', null)));
+  }
+
+  startLoading() {
+    this.setLoading(true);
+  }
+
+  finishedLoading() {
+    this.setLoading(false);
+  }
+
+  setLoading(loading) {
+    this.loading = loading;
+    this.loadingChanged.next();
   }
 }
