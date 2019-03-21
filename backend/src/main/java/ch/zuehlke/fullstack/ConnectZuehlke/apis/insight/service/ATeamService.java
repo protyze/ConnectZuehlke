@@ -34,7 +34,7 @@ public class ATeamService {
         allScores = combineValues(allScores, aTeamsByZuehlkeTeam);
 
         ArrayList<ATeam> aTeams = new ArrayList<>();
-        while (!allScores.isEmpty() || aTeams.size() <= 3) {
+        while (!allScores.isEmpty() && aTeams.size() <= 3) {
             ATeamPair pairWithHighestScore = findPairWithHighestScore(allScores);
             allScores.remove(pairWithHighestScore);
 
@@ -142,7 +142,7 @@ public class ATeamService {
                         if (scorePairs.containsKey(pair) || scorePairs.containsKey(pair2)) {
                             Double val1 = scorePairs.get(pair);
                             Double val2 = scorePairs.get(pair2);
-                            scorePairs.put(val1 == null ? pair2 : pair, val1 == null ? val2 : val1 + 1.0);
+                            scorePairs.put(val1 == null ? pair2 : pair, (val1 == null ? val2 : val1) + 1.0);
                         } else {
                             scorePairs.put(pair, 1.0);
                         }
