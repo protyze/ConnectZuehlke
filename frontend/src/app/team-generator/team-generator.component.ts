@@ -11,7 +11,7 @@ import { Team } from '../domain/Team';
   styleUrls: ['./team-generator.component.scss']
 })
 export class TeamGeneratorComponent implements OnInit, OnDestroy {
-  filters: Filter;
+  filters = new Filter(7);
   teamsResults: Array<Team> = [];
 
   constructor(private employeeService: EmployeeService) {
