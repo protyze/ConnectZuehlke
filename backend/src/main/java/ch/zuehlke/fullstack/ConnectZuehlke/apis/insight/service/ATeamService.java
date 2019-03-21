@@ -41,14 +41,14 @@ public class ATeamService {
             List<ATeamMember> aTeamMembers = new ArrayList<>();
             aTeamMembers.add(new ATeamMember(pairWithHighestScore.getE1()));
             aTeamMembers.add(new ATeamMember(pairWithHighestScore.getE2()));
-            nrOfTeamMembers -= 2;
+            int newNumberOfTeamMembers = nrOfTeamMembers - 2;
 
             List<ATeamMember> aTeamMembers1 = new ArrayList<>();
-            getNextTeamMember(allScores, aTeamMembers1, pairWithHighestScore.getE1(), nrOfTeamMembers);
+            getNextTeamMember(allScores, aTeamMembers1, pairWithHighestScore.getE1(), newNumberOfTeamMembers);
             aTeamMembers.addAll(aTeamMembers);
 
             List<ATeamMember> aTeamMembers2 = new ArrayList<>();
-            getNextTeamMember(allScores, aTeamMembers2, pairWithHighestScore.getE2(), nrOfTeamMembers);
+            getNextTeamMember(allScores, aTeamMembers2, pairWithHighestScore.getE2(), newNumberOfTeamMembers);
             aTeamMembers.addAll(aTeamMembers2);
 
             ATeam aTeam = new ATeam(aTeamMembers, new Score(1.0));
