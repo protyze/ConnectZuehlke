@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { CapabilitiesService } from '../services/capabilities.service';
 
 import { Filter } from '../domain/Filter';
+
+import { Capability } from '../domain/Capabilities';
 
 @Component({
   selector: 'app-filters',
@@ -15,8 +16,17 @@ export class FiltersComponent implements OnInit {
   @Input() selectedFilters: Filter;
   @Output() filtersChanged = new EventEmitter<Filter>();
 
-  //filterForm: FormGroup;
-  capabilities: Array<string> = [];
+  capabilities: Array<Capability> = [];
+
+  dropdownSettings = {
+    singleSelection: false,
+    idField: 'id',
+    textField: 'name',
+    selectAllText: 'Select All',
+    unSelectAllText: 'UnSelect All',
+    itemsShowLimit: 3,
+    allowSearchFilter: true
+  };
 
   constructor(private serviceCapabilities: CapabilitiesService) {
 
@@ -50,5 +60,4 @@ export class FiltersComponent implements OnInit {
   getCapabilities() {
     this.capabilities = this.serviceCapabilities.getCapabilities();
   }
-
 }

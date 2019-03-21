@@ -1,17 +1,22 @@
 <form (ngSubmit)="onFormSubmit(form)" #form="ngForm">
-  <div class="row">
-    <div class="col">
-      <mat-form-field>
-        <input matInput type="number" id="numberOfEmployees" name="numberOfEmployees"
-          [ngModel]="selectedFilters.numberOfEmployees" required #numberOfEmployees="ngModel" placeholder="Team Size" />
-        <mat-hint>How many employees do you need?</mat-hint>
-        <mat-error *ngIf="numberOfEmployees.invalid && numberOfEmployees.touched">
-          Please define the team size!
-        </mat-error>
-      </mat-form-field>
+  <div class="row align-items-center">
+    <div class="col-12 col-md-6">
+      <div class="display-box">
+        <mat-form-field>
+          <input matInput type="number" min="3" max="9" id="numberOfEmployees" name="numberOfEmployees"
+            [ngModel]="selectedFilters.numberOfEmployees" required #numberOfEmployees="ngModel"
+            placeholder="Team Size" />
+          <mat-hint>How many employees do you need?</mat-hint>
+          <mat-error *ngIf="numberOfEmployees.invalid && numberOfEmployees.touched">
+            Please define the team size!
+          </mat-error>
+        </mat-form-field>
+      </div>
     </div>
-    <div class="col">
-      {{capabilities}}
+    <div class="col-12 col-md-6">
+      <ng-multiselect-dropdown [placeholder]="'Skills'" [data]="capabilities" [ngModel]="selectedFilters.skills"
+        [settings]="dropdownSettings" name="skills">
+      </ng-multiselect-dropdown>
     </div>
   </div>
   <div class="row">
