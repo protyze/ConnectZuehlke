@@ -16,6 +16,7 @@ public class CustomerRestController {
         this.customerService = customerService;
     }
 
+    //test
     @GetMapping("/api/customers")
     public List<Customer> customerList() {
         return customerService.getCustomers();
