@@ -11,4 +11,7 @@
       <div class="col">{{employee.available ? "Yes" : "No"}}</div>
     </div>
   </mat-card-content>
+  <mat-card-actions>
+    <button color="primary" [routerLink]='"/employee/" + employee.code' mat-button>PROFILE</button>
+  </mat-card-actions>
 </mat-card>
