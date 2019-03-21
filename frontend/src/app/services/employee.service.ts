@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+
 import { HttpClient } from '@angular/common/http';
 import { Employee } from '../domain/Employee';
 import { Team } from '../domain/Team';
@@ -9,27 +10,36 @@ import { Filter } from '../domain/Filter';
 @Injectable({ providedIn: 'root' })
 export class EmployeeService {
   private teams: Array<Team> = [{
-    employees: [
-      { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo', isAvailable: false, role: 'test', unit: 'test', skills: ['a'], groups: ['a'], location: '', jobProfile: { name: '' } },
-      { firstName: 'Max', lastName: 'Mustermann', id: 1, code: 'jdo', isAvailable: false, role: 'test', unit: 'test', skills: ['a'], groups: ['a'], location: '', jobProfile: { name: '' } }
+    score: {
+      value: 1
+    },
+    teamMembers: [
+      { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo', available: false },
+      { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo', available: false }
     ]
   }, {
-    employees: [
-      { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo', isAvailable: false, role: 'test', unit: 'test', skills: ['a'], groups: ['a'], location: '', jobProfile: { name: '' } },
-      { firstName: 'Max', lastName: 'Mustermann', id: 1, code: 'jdo', isAvailable: false, role: 'test', unit: 'test', skills: ['a'], groups: ['a'], location: '', jobProfile: { name: '' } }
+    score: {
+      value: 1
+    },
+    teamMembers: [
+      { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo', available: false },
+      { firstName: 'John', lastName: 'Doe', id: 1, code: 'jdo', available: false }
     ]
   }];
 
   teamsFetched = new Subject<void>();
 
   constructor(private http: HttpClient) {
+
   }
 
   public fetchTeams(filters: Filter) {
-    // API Request to get Teams
-    // Notify Subscribers about updated Teams!
-    console.error('Not implemented');
-    this.teamsFetched.next();
+    const teams = this.http
+      .get('/api/ateams')
+      .subscribe((data: Team[]) => {
+        this.teams = data;
+        this.teamsFetched.next();
+      });
   }
 
   public getTeams() {

@@ -1,5 +1,10 @@
 import { Employee } from './Employee';
 
+interface Score {
+  value: number;
+}
+
 export class Team {
-  employees: Array<Employee> = [];
+  score: Score;
+  teamMembers: Array<Employee> = [];
 }

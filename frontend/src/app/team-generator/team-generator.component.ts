@@ -18,6 +18,7 @@ export class TeamGeneratorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.getTeams();
     this.employeeService
       .teamsFetched
       .subscribe(() => {
