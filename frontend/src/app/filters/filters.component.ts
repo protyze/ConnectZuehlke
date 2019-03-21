@@ -17,6 +17,19 @@ export class FiltersComponent implements OnInit {
   ngOnInit() {
   }
 
+  onFormSubmit(form) {
+    const { numberOfEmployees, skills } = form.value;
+    console.log(form);
+
+    if (!form.invalid) {
+      this.onFilterChanged({
+        ...this.selectedFilters,
+        numberOfEmployees,
+        skills
+      });
+    }
+  }
+
   onFilterChanged(newFilters: Filter) {
     this.filtersChanged.emit(newFilters);
   }

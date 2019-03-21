@@ -21,25 +21,44 @@ public class ATeamController {
 
     @GetMapping("/api/ateams")
     public ResponseEntity<List<ATeam>> loadATeams() {
-        List<OrganisationUnit> focusGroups = organisationUnitService.getFocusGroups();
-        List<ATeam> focusGroupToEmployees = new ArrayList<>();
 
-        for (OrganisationUnit focusGroup : focusGroups) {
-            List<ATeamMember> participantsInFocusGroup = organisationUnitService.getParticipantsInFocusGroup(focusGroup.getId()).stream()
-                    .map(this::create)
+        ArrayList<ATeamMember> aTeamsByFocusGroup = loadATeamsByFocusGroup();
+        ArrayList<ATeamMember> aTeamsByZuehlkeTeam = loadATeamsByZuehlkeTeam();
+
+        ArrayList<ATeamMember> aTeams = new ArrayList<>();
+        aTeams.addAll(aTeamsByFocusGroup);
+        aTeams.addAll(aTeamsByZuehlkeTeam);
+        ATeam aTeam = new ATeam(aTeams, new Score(1.0));
+        return ResponseEntity.ok(Arrays.asList(aTeam));
+    }
+
+    private ArrayList<ATeamMember> loadATeamsByZuehlkeTeam() {
+        ArrayList<ATeamMember> zuehlkeTeamMembers = new ArrayList<>();
+
+        List<OrganisationUnit> zuehlkeTeams = organisationUnitService.getTeams();
+
+        for (OrganisationUnit team : zuehlkeTeams) {
+            List<ATeamMember> participantsOfZuehlkeTeam = organisationUnitService.getParticipantsInOrganisationUnit(team.getId()).stream()
+                    .map(e -> new ATeamMember(new Employee(e.getId(), e.getFirstName(), e.getLastName()), false, null, null, null, new ZuehlkeTeam(team.getName()), null))
                     .collect(toList());
-
-            Score score = new Score(1.0);
-            ATeam aTeam = new ATeam(participantsInFocusGroup, score);
-            focusGroupToEmployees.add(aTeam);
-
+            zuehlkeTeamMembers.addAll(participantsOfZuehlkeTeam);
         }
 
-        Collections.sort(focusGroupToEmployees);
-        return ResponseEntity.ok(focusGroupToEmployees);
+        return zuehlkeTeamMembers;
     }
 
-    private ATeamMember create(Employee e) {
-        return new ATeamMember(e.getId(), e.getFirstName(), e.getLastName(), false, null, null, null, null);
+    private ArrayList<ATeamMember> loadATeamsByFocusGroup() {
+
+        List<OrganisationUnit> focusGroups = organisationUnitService.getFocusGroups();
+        ArrayList<ATeamMember> teamMembers = new ArrayList<>();
+
+        for (OrganisationUnit focusGroup : focusGroups) {
+            List<ATeamMember> participantsInFocusGroup = organisationUnitService.getParticipantsInOrganisationUnit(focusGroup.getId()).stream()
+                    .map(e -> new ATeamMember(new Employee(e.getId(), e.getFirstName(), e.getLastName()), false, null, null, null, null, new FocusGroup(focusGroup.getName())))
+                    .collect(toList());
+            teamMembers.addAll(participantsInFocusGroup);
+        }
+        return teamMembers;
     }
+
 }

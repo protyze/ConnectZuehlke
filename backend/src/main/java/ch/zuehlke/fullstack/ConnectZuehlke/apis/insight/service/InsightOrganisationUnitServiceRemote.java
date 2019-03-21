@@ -63,9 +63,9 @@ public class InsightOrganisationUnitServiceRemote implements InsightOrganisation
     }
 
     @Override
-    public List<Employee> getParticipantsInFocusGroup(String focusGroupId) {
+    public List<Employee> getParticipantsInOrganisationUnit(String organisationUnitId) {
         ResponseEntity<List<FocusGroupParticipant>> response = this.insightRestTemplate
-                .exchange(String.format("/organisationunits/%s/participants", focusGroupId), GET, null, new ParameterizedTypeReference<List<FocusGroupParticipant>>() {
+                .exchange(String.format("/organisationunits/%s/participants", organisationUnitId), GET, null, new ParameterizedTypeReference<List<FocusGroupParticipant>>() {
                 });
 
         return response.getBody()
@@ -83,7 +83,7 @@ public class InsightOrganisationUnitServiceRemote implements InsightOrganisation
     }
 
     static Employee create(EmployeeDto employeeDto) {
-        return new Employee(employeeDto.getFirstName(), employeeDto.getLastName(), employeeDto.getId());
+        return new Employee(employeeDto.getId(), employeeDto.getFirstName(), employeeDto.getLastName());
     }
 
     private List<OrganisationUnit> getOrganisationUnits() {

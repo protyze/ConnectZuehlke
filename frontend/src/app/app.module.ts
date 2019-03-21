@@ -26,6 +26,7 @@ import {
   MatSnackBarModule,
   MatToolbarModule,
   MatCardModule,
+  MatGridListModule
 } from '@angular/material';
 import { NavigationComponent } from './navigation/navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -38,6 +39,8 @@ import { ErrorRequestInterceptor } from './common/error-request-interceptor';
 import { FiltersComponent } from './filters/filters.component';
 import { TeamListComponent } from './team-list/team-list.component';
 import { TeamComponent } from './team/team.component';
+import { TeamMemberComponent } from './team-member/team-member.component';
+import { EmployeeImageComponent } from './employee-image/employee-image.component';
 import { RelationWheelComponent } from './chart/relation-wheel/relation-wheel/relation-wheel.component';
 
 // For more icons, please checkout https://fontawesome.com/icons?d=gallery
@@ -60,7 +63,10 @@ library.add(faAngular);
     FiltersComponent,
     TeamListComponent,
     TeamComponent,
-    RelationWheelComponent
+    RelationWheelComponent,
+    TeamComponent,
+    TeamMemberComponent,
+    EmployeeImageComponent
   ],
   imports: [
     BrowserModule,
@@ -82,6 +88,7 @@ library.add(faAngular);
     MatToolbarModule,
     MatSidenavModule,
     MatListModule,
+    MatGridListModule,
     AgmCoreModule.forRoot({ apiKey: 'AIzaSyBrgp24CvFV3M0PZGByVDVEG0qn56k8Y-g' })
   ],
   providers: [

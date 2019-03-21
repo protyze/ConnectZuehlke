@@ -3,39 +3,26 @@ package ch.zuehlke.fullstack.ConnectZuehlke.domain;
 import java.util.List;
 
 public class ATeamMember {
-    private int id;
-    private String firstName;
-    private String lastName;
+    private final Employee employee;
     private boolean isAvailable;
     private Title grade;
     private String unit;
     private List<Skill> skills;
-    private List<FocusGroup> focusGroups;
 
-    public ATeamMember(int id, String firstName, String lastName,boolean isAvailable, Title grade, String unit, List<Skill> skills, List<FocusGroup> focusGroups) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    private ZuehlkeTeam zuehlkeTeam;
+
+    private FocusGroup focusGroups;
+
+    public ATeamMember(Employee employee, boolean isAvailable, Title grade, String unit, List<Skill> skills, ZuehlkeTeam zuehlkeTeam, FocusGroup focusGroups) {
+
+        this.employee = employee;
+
         this.isAvailable = isAvailable;
         this.grade = grade;
         this.unit = unit;
         this.skills = skills;
+        this.zuehlkeTeam = zuehlkeTeam;
         this.focusGroups = focusGroups;
-    }
-
-    public ATeamMember() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
     }
 
     public boolean isAvailable() {
@@ -54,7 +41,15 @@ public class ATeamMember {
         return skills;
     }
 
-    public List<FocusGroup> getFocusGroups() {
+    public FocusGroup getFocusGroups() {
         return focusGroups;
+    }
+
+    public ZuehlkeTeam getZuehlkeTeam() {
+        return zuehlkeTeam;
+    }
+
+    public Employee getEmployee() {
+        return employee;
     }
 }

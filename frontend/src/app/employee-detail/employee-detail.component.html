@@ -17,7 +17,7 @@
         </p>
       </td>
       <td>
-        <img src="http://localhost:8080/api/employee/{{employee.id}}/picture" style="width:100px">
+        <app-employee-image [employeeId]="employee.id" [size]="100"></app-employee-image>
       </td>
     </tr>
   </table>

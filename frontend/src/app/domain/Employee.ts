@@ -7,11 +7,12 @@ export interface Employee {
   lastName: string;
   id: number;
   code: string;
-  isAvailable: boolean;
-  role: string;
-  unit: string;
-  location: string;
-  skills: Array<string>;
-  groups: Array<string>;
-  jobProfile: jobProfile;
+  available: boolean;
+  job?: string;
+  grade?: string;
+  unit?: string;
+  location?: string;
+  skills?: Array<string>;
+  focusGroups?: Array<string>;
+  jobProfile?: jobProfile;
 }

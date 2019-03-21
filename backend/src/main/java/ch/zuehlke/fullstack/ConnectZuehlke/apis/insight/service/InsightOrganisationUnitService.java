@@ -15,5 +15,5 @@ public interface InsightOrganisationUnitService {
 
     List<OrganisationUnit> getOrganisationStructures();
 
-    List<Employee> getParticipantsInFocusGroup(String focusGroupId);
+    List<Employee> getParticipantsInOrganisationUnit(String focusGroupId);
 }

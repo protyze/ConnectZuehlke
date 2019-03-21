@@ -1,14 +1,23 @@
 <mat-card>
-  <mat-card-title>Team</mat-card-title>
-  <mat-card-content>
-    <div class="p-3">
-      <mat-list>
-        <mat-list-item *ngFor="let employee of team.employees">
-          <mat-card>
-            <mat-card-title>{{employee.firstName}} {{employee.lastName}}</mat-card-title>
-          </mat-card>
-        </mat-list-item>
-      </mat-list>
+  <div class="row">
+    <div class="col">
+      <mat-card-title>Team</mat-card-title>
     </div>
-  </mat-card-content>
+    <div class="col-auto">
+      <span class="team-score">Score: {{team.score.value}}</span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <mat-card-content>
+        <div class="p-3">
+          <mat-grid-list cols="4">
+            <mat-grid-tile *ngFor="let employee of team.teamMembers">
+              <app-team-member [employee]="employee"></app-team-member>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </div>
+      </mat-card-content>
+    </div>
+  </div>
 </mat-card>
