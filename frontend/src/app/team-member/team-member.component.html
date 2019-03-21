@@ -1,5 +1,5 @@
-<mat-card>
-  <mat-card-title>{{employee.firstName}} {{employee.lastName}}</mat-card-title>
+<mat-card class="w-100">
+  <mat-card-title class="text-truncate">{{employee.firstName}} {{employee.lastName}}</mat-card-title>
   <app-employee-image [employeeId]="employee.id"></app-employee-image>
   <mat-card-content>
     <div class="row mt-3">
@@ -11,4 +11,7 @@
       <div class="col">{{employee.available ? "Yes" : "No"}}</div>
     </div>
   </mat-card-content>
+  <mat-card-actions>
+    <button color="primary" [routerLink]='"/employee/" + employee.code' mat-button>PROFILE</button>
+  </mat-card-actions>
 </mat-card>

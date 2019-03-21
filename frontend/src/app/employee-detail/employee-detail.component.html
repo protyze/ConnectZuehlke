@@ -1,26 +1,22 @@
-<div *ngIf="employee$ | async as employee">
+<div *ngIf="employee$ | async as employee" class="p-3">
   <h3>{{ employee.firstName}} {{ employee.lastName}}</h3>
-  <table>
-    <tr>
-      <td>
-        <p>
-          <label>Kürzel: </label>{{ employee.code }}
-        </p>
-        <p>
-          <label>Id: </label>{{ employee.id }}
-        </p>
-        <p>
-          <label>Position: </label>{{ employee.jobProfile.name }}
-        </p>
-        <p>
-          <label>Location: </label>{{ employee.location}}
-        </p>
-      </td>
-      <td>
-        <app-employee-image [employeeId]="employee.id" [size]="100"></app-employee-image>
-      </td>
-    </tr>
-  </table>
+  <div class="row mt-5">
+    <div class="col-12 mb-4 mb-sm-0 mr-sm-2 col-sm-auto">
+      <app-employee-image [employeeId]="employee.id" [size]="300"></app-employee-image>
+    </div>
+    <div class="col-12 col-sm-6">
+      <div class="row">
+        <div class="col"><label>Kürzel:&nbsp;</label>{{ employee.code }}</div>
+      </div>
+      <div class="row">
+        <div class="col"><label>Id:&nbsp;</label>{{ employee.id }}</div>
+      </div>
+      <div class="row">
+        <div class="col"><label>Position:&nbsp;</label>{{ employee.jobProfile.name }}</div>
+      </div>
+      <div class="row">
+        <div class="col"><label>Location:&nbsp;</label>{{ employee.location}}</div>
+      </div>
+    </div>
+  </div>
 </div>
-
-<relation-wheel></relation-wheel>

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Employee } from '../domain/Employee';
 import { Team } from '../domain/Team';
 import { Filter } from '../domain/Filter';
@@ -28,23 +28,36 @@ export class EmployeeService {
     ]
   }];
 
+  private loading = false;
+
   teamsFetched = new Subject<void>();
+  loadingChanged = new Subject<void>();
+
 
   constructor(private http: HttpClient) {
 
   }
 
   public fetchTeams(filters: Filter) {
-    const teams = this.http
-      .get('/api/ateams')
+    this.startLoading();
+    this.http
+      .get('/api/ateams', {
+        params: new HttpParams()
+          .set('nE', filters.numberOfEmployees.toString())
+          .set('skills', filters.skills.map(skill => skill.name).join())
+      })
       .subscribe((data: Team[]) => {
         this.teams = data;
         this.teamsFetched.next();
-      });
+      }, this.finishedLoading.bind(this), this.finishedLoading.bind(this));
   }
 
   public getTeams() {
     return this.teams;
+  }
+
+  public isLoading() {
+    return this.loading;
   }
 
   public getAllEmployees(): Observable<Employee[]> {
@@ -89,5 +102,18 @@ export class EmployeeService {
     return this.http
       .get<RelationshipData>(`/api/employee/relations`)
       .pipe(catchError(this.handleError('getRelationshipData', null)));
+  }
+
+  startLoading() {
+    this.setLoading(true);
+  }
+
+  finishedLoading() {
+    this.setLoading(false);
+  }
+
+  setLoading(loading) {
+    this.loading = loading;
+    this.loadingChanged.next();
   }
 }

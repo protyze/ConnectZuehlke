@@ -26,8 +26,11 @@ import {
   MatSnackBarModule,
   MatToolbarModule,
   MatCardModule,
-  MatGridListModule
+  MatGridListModule,
+  MatButtonToggleModule,
+  MatProgressBarModule
 } from '@angular/material';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { NavigationComponent } from './navigation/navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { SidebarComponent } from './navigation/sidebar/sidebar.component';
@@ -89,7 +92,10 @@ library.add(faAngular);
     MatSidenavModule,
     MatListModule,
     MatGridListModule,
-    AgmCoreModule.forRoot({ apiKey: 'AIzaSyBrgp24CvFV3M0PZGByVDVEG0qn56k8Y-g' })
+    MatButtonToggleModule,
+    MatProgressBarModule,
+    AgmCoreModule.forRoot({ apiKey: 'AIzaSyBrgp24CvFV3M0PZGByVDVEG0qn56k8Y-g' }),
+    NgMultiSelectDropDownModule.forRoot()
   ],
   providers: [
     {

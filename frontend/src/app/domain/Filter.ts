@@ -1,5 +1,7 @@
+import { Capability } from './Capabilities';
+
 export class Filter {
-  skills: Array<string> = [];
+  skills: Array<Capability> = [];
 
   constructor(public numberOfEmployees = 5) {
   }

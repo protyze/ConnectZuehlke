@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -17,7 +18,7 @@ import static java.util.Arrays.asList;
 public class InsightEmployeeServiceMocked implements InsightEmployeeService {
 
     public static final List<Employee> EMPLOYEES = asList(
-            new Employee("Klaus", "Mustermann", 1, "kmu", "Test", new JobProfile("TestProfile"))
+            new Employee("Klaus", "Mustermann", 1, "kmu", "Test", new JobProfile("TestProfile"), LocalDate.of(1980, 1, 1))
     );
 
     public List<Employee> getEmployees() {
@@ -50,5 +51,10 @@ public class InsightEmployeeServiceMocked implements InsightEmployeeService {
         employeeRelations.add(new EmployeeRelationship(2, 4, "#b1a0e7"));
         employeeRelations.add(new EmployeeRelationship(1, 35, "#b1a0e7"));
        return new RelationshipData(nodeList, employeeRelations);
+    }
+
+    @Override
+    public double getWorkedWith(String code1, String code2) {
+        return 0.5;
     }
 }

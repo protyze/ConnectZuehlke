@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="row mt-3">
+  <div class="row mt-5">
     <div class="col">
       <h1>Zühlke A-Team Generator</h1>
     </div>
@@ -7,6 +7,11 @@
   <div class="row mt-5">
     <div class="col">
       <app-filters [selectedFilters]="filters" (filtersChanged)="onFilterChanged($event)"></app-filters>
+    </div>
+  </div>
+  <div class="row fixed-top" *ngIf="isLoading">
+    <div class="col">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </div>
   </div>
   <div class="row">
