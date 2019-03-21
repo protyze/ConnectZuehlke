@@ -24,7 +24,8 @@ import {
   MatSelectModule,
   MatSidenavModule,
   MatSnackBarModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatCardModule
 } from '@angular/material';
 import { NavigationComponent } from './navigation/navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -74,6 +75,7 @@ library.add(faAngular);
     MatSelectModule,
     MatIconModule,
     MatSnackBarModule,
+    MatCardModule,
     LayoutModule,
     MatToolbarModule,
     MatSidenavModule,

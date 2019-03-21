@@ -1,3 +1,14 @@
-<p>
-  team works!
-</p>
+<mat-card>
+  <mat-card-title>Team</mat-card-title>
+  <mat-card-content>
+    <div class="p-3">
+      <mat-list>
+        <mat-list-item *ngFor="let employee of team.employees">
+          <mat-card>
+            <mat-card-title>{{employee.firstName}} {{employee.lastName}}</mat-card-title>
+          </mat-card>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </mat-card-content>
+</mat-card>
