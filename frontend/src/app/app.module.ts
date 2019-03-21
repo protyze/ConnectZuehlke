@@ -26,7 +26,8 @@ import {
   MatSnackBarModule,
   MatToolbarModule,
   MatCardModule,
-  MatGridListModule
+  MatGridListModule,
+  MatButtonToggleModule
 } from '@angular/material';
 import { NavigationComponent } from './navigation/navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -89,6 +90,7 @@ library.add(faAngular);
     MatSidenavModule,
     MatListModule,
     MatGridListModule,
+    MatButtonToggleModule,
     AgmCoreModule.forRoot({ apiKey: 'AIzaSyBrgp24CvFV3M0PZGByVDVEG0qn56k8Y-g' })
   ],
   providers: [
