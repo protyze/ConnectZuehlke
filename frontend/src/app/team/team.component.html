@@ -1,4 +1,4 @@
-<mat-card>
+<div>
   <div class="row">
     <div class="col">
       <mat-card-title>Team</mat-card-title>
@@ -9,15 +9,12 @@
   </div>
   <div class="row">
     <div class="col">
-      <mat-card-content>
-        <div class="p-3">
-          <mat-grid-list cols="4">
-            <mat-grid-tile *ngFor="let employee of team.teamMembers">
-              <app-team-member [employee]="employee"></app-team-member>
-            </mat-grid-tile>
-          </mat-grid-list>
+      <div class="row mt-3">
+        <div class="col-sm-6 col-md-4 col-lg-3 col-12" *ngFor="let employee of team.teamMembers">
+          <app-team-member class="w-100 p-1" [employee]="employee"></app-team-member>
         </div>
-      </mat-card-content>
+      </div>
     </div>
   </div>
-</mat-card>
+</div>
+<hr />

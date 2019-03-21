@@ -1,17 +1,23 @@
 <form (ngSubmit)="onFormSubmit(form)" #form="ngForm">
-  <div>
-    <mat-form-field>
-      <input matInput type="number" id="numberOfEmployees" name="numberOfEmployees"
-        [ngModel]="selectedFilters.numberOfEmployees" required #numberOfEmployees="ngModel" placeholder="Team Size" />
-      <mat-hint>How many employees do you need?</mat-hint>
-      <mat-error *ngIf="numberOfEmployees.invalid && numberOfEmployees.touched">
-        Please define the team size!
-      </mat-error>
-    </mat-form-field>
+  <div class="row">
+    <div class="col">
+      <mat-form-field>
+        <input matInput type="number" id="numberOfEmployees" name="numberOfEmployees"
+          [ngModel]="selectedFilters.numberOfEmployees" required #numberOfEmployees="ngModel" placeholder="Team Size" />
+        <mat-hint>How many employees do you need?</mat-hint>
+        <mat-error *ngIf="numberOfEmployees.invalid && numberOfEmployees.touched">
+          Please define the team size!
+        </mat-error>
+      </mat-form-field>
+    </div>
   </div>
-  <div class="mt-5 mb-5">
-    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
-      Generate A-Team!
-    </button>
+  <div class="row">
+    <div class="col">
+      <div class="mt-5 mb-5">
+        <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+          Generate A-Team!
+        </button>
+      </div>
+    </div>
   </div>
 </form>
