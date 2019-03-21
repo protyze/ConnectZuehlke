@@ -9,7 +9,7 @@ public class InsightProperties {
 
   private String url;
   private Authentication authentication = new Authentication();
-  //test
+
   public String getUrl() {
     return url;
   }
