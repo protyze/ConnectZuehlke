@@ -1,5 +1,6 @@
 package ch.zuehlke.fullstack.ConnectZuehlke.apis.insight.service;
 
+import ch.zuehlke.fullstack.ConnectZuehlke.domain.Employee;
 import ch.zuehlke.fullstack.ConnectZuehlke.domain.OrganisationUnit;
 
 import java.util.Arrays;
@@ -25,5 +26,11 @@ public class InsightOrganisationUnitServiceMock implements InsightOrganisationUn
     @Override
     public List<OrganisationUnit> getOrganisationStructures() {
         return Arrays.asList(new OrganisationUnit("1", "Test", 1, Collections.emptyList()));
+    }
+
+    @Override
+    public List<Employee> getParticipantsInFocusGroup(String focusGroupId) {
+
+        return null;
     }
 }

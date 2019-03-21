@@ -1,6 +1,9 @@
 package ch.zuehlke.fullstack.ConnectZuehlke.apis.insight.service;
 
+import ch.zuehlke.fullstack.ConnectZuehlke.apis.insight.dto.EmployeeDto;
 import ch.zuehlke.fullstack.ConnectZuehlke.apis.insight.dto.OrganisationUnitDto;
+import ch.zuehlke.fullstack.ConnectZuehlke.domain.Employee;
+import ch.zuehlke.fullstack.ConnectZuehlke.domain.FocusGroupParticipant;
 import ch.zuehlke.fullstack.ConnectZuehlke.domain.OrganisationUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -56,6 +60,30 @@ public class InsightOrganisationUnitServiceRemote implements InsightOrganisation
         return list.stream()
                 .filter(OrganisationUnit::isFocusGroup)
                 .collect(toList());
+    }
+
+    @Override
+    public List<Employee> getParticipantsInFocusGroup(String focusGroupId) {
+        ResponseEntity<List<FocusGroupParticipant>> response = this.insightRestTemplate
+                .exchange(String.format("/organisationunits/%s/participants", focusGroupId), GET, null, new ParameterizedTypeReference<List<FocusGroupParticipant>>() {
+                });
+
+        return response.getBody()
+                .stream()
+                .filter(Objects::nonNull)
+                .map(FocusGroupParticipant::getEmployee)
+                .filter(this::hasNames)
+                .map(InsightOrganisationUnitServiceRemote::create)
+                .collect(toList());
+
+    }
+
+    private boolean hasNames(EmployeeDto employeeDto) {
+        return employeeDto.getFirstName() != null && employeeDto.getLastName() != null;
+    }
+
+    static Employee create(EmployeeDto employeeDto) {
+        return new Employee(employeeDto.getFirstName(), employeeDto.getLastName(), employeeDto.getId());
     }
 
     private List<OrganisationUnit> getOrganisationUnits() {
