@@ -37,4 +37,11 @@ public class EmployeeRestController {
     byte[] getEmployeePicture(@PathVariable(value = "id") int id) throws IOException {
         return employeeService.getEmployeePicture(id);
     }
+
+    @GetMapping("/api/employee/{code1}/workedWith/{code2}")
+    public double workedWith(
+            @PathVariable(value = "code1") String code1,
+            @PathVariable(value = "code2") String code2) {
+        return employeeService.getWorkedWith(code1, code2);
+    }
 }

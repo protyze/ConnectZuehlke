@@ -1,8 +1,11 @@
 package ch.zuehlke.fullstack.ConnectZuehlke.apis.insight.dto;
 
 import ch.zuehlke.fullstack.ConnectZuehlke.domain.Employee;
+import ch.zuehlke.fullstack.ConnectZuehlke.domain.JobProfile;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.time.LocalDateTime;
 
 @JsonIgnoreProperties
 public class EmployeeDto {
@@ -18,6 +21,8 @@ public class EmployeeDto {
     private String location;
     @JsonProperty("JobProfile")
     private JobProfileDto jobProfileDto;
+    @JsonProperty("EntryDate")
+    private LocalDateTime entryDate;
 
     public String getLastName() {
         return lastName;
@@ -43,6 +48,10 @@ public class EmployeeDto {
         return code;
     }
 
+    public LocalDateTime getEntryDate() {
+        return entryDate;
+    }
+
     public Employee toEmployee() {
         return new Employee(
                 getFirstName(),
@@ -50,7 +59,8 @@ public class EmployeeDto {
                 getId(),
                 getCode(),
                 getLocation(),
-                getJobProfileDto().toJobProfile());
+                getJobProfileDto() == null? new JobProfile("") : getJobProfileDto().toJobProfile(),
+                getEntryDate().toLocalDate());
     }
 
 }

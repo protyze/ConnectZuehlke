@@ -12,4 +12,6 @@ public interface InsightEmployeeService {
   byte[] getEmployeePicture(int id) throws IOException;
 
   Employee getEmployee(String code);
+
+  double getWorkedWith(String code1, String code2);
 }

@@ -8,6 +8,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -17,7 +18,7 @@ import static java.util.Arrays.asList;
 public class InsightEmployeeServiceMocked implements InsightEmployeeService {
 
     public static final List<Employee> EMPLOYEES = asList(
-            new Employee("Klaus", "Mustermann", 1, "kmu", "Test", new JobProfile("TestProfile"))
+            new Employee("Klaus", "Mustermann", 1, "kmu", "Test", new JobProfile("TestProfile"), LocalDate.of(1980, 1, 1))
     );
 
     public List<Employee> getEmployees() {
@@ -33,5 +34,10 @@ public class InsightEmployeeServiceMocked implements InsightEmployeeService {
     @Override
     public Employee getEmployee(String code) {
         return EMPLOYEES.stream().filter(employee -> employee.getCode().equals(code)).findFirst().orElse(null);
+    }
+
+    @Override
+    public double getWorkedWith(String code1, String code2) {
+        return 0.5;
     }
 }
