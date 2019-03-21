@@ -34,7 +34,7 @@ export class EmployeeService {
   }
 
   public fetchTeams(filters: Filter) {
-    const teams = this.http
+    this.http
       .get('/api/ateams')
       .subscribe((data: Team[]) => {
         this.teams = data;
