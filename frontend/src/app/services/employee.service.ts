@@ -43,7 +43,7 @@ export class EmployeeService {
     this.http
       .get('/api/ateams', {
         params: new HttpParams()
-          .set('nE', filters.numberOfEmployees.toString())
+          .set('nrOfTeamMembers', filters.numberOfEmployees.toString())
           .set('skills', filters.skills.map(skill => skill.name).join())
       })
       .subscribe((data: Team[]) => {
