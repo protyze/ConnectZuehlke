@@ -1,7 +1,9 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, Input } from '@angular/core';
 import * as go from "gojs";
-import {EmployeeNode, EmployeeRelationship, RelationshipData} from "../../../domain/wheel-chart";
-import {EmployeeService} from "../../../services/employee.service";
+import { EmployeeNode, EmployeeRelationship, RelationshipData } from "../../../domain/wheel-chart";
+import { EmployeeService } from "../../../services/employee.service";
+
+import { Team } from 'src/app/domain/Team';
 
 @Component({
   selector: 'relation-wheel',
@@ -9,6 +11,8 @@ import {EmployeeService} from "../../../services/employee.service";
   styleUrls: ['./relation-wheel.component.scss']
 })
 export class RelationWheelComponent implements OnInit {
+
+  @Input() team: Team;
 
   @ViewChild('myDiagramDiv')
   element: ElementRef;
@@ -19,9 +23,12 @@ export class RelationWheelComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.service.getRelationshipData().subscribe((data: RelationshipData) => {
+    this.service.getRelationshipData(this.team.teamMembers).subscribe((data: RelationshipData) => {
       this.relationshipData = data;
-      this.renderGraph(this.relationshipData);
+      this.renderGraph({
+        ...this.relationshipData,
+        employeeNodes: this.team.teamMembers.map((member, key) => ({ key, text: `${member.employee.firstName} ${member.employee.lastName}`, color: '#00000' }))
+      });
     });
   }
 
@@ -36,9 +43,9 @@ export class RelationWheelComponent implements OnInit {
     go.Diagram.inherit(WheelLayout, go.CircularLayout);
 
     // override makeNetwork to set the diameter of each node and ignore the TextBlock label
-    WheelLayout.prototype.makeNetwork = function(coll) {
+    WheelLayout.prototype.makeNetwork = function (coll) {
       var net = go.CircularLayout.prototype.makeNetwork.call(this, coll);
-      net.vertexes.each(function(cv) {
+      net.vertexes.each(function (cv) {
         cv.diameter = 20;  // because our desiredSize for nodes is (20, 20)
       });
       return net;
@@ -46,9 +53,9 @@ export class RelationWheelComponent implements OnInit {
 
     // override commitNodes to rotate nodes so the text goes away from the center,
     // and flip text if it would be upside-down
-    WheelLayout.prototype.commitNodes = function() {
+    WheelLayout.prototype.commitNodes = function () {
       go.CircularLayout.prototype['commitNodes'].call(this);
-      this.network.vertexes.each(function(v) {
+      this.network.vertexes.each(function (v) {
         var node = v.node;
         if (node === null) return;
         // get the angle of the node towards the center, and rotate it accordingly
@@ -63,11 +70,11 @@ export class RelationWheelComponent implements OnInit {
 
     // override commitLinks in order to make sure all of the Bezier links are "inside" the ellipse;
     // this helps avoid links crossing over any other nodes
-    WheelLayout.prototype.commitLinks = function() {
+    WheelLayout.prototype.commitLinks = function () {
       go.CircularLayout.prototype['commitLinks'].call(this);
       if (this.network.vertexes.count > 4) {
-        this.network.vertexes.each(function(v) {
-          v.destinationEdges.each(function(de) {
+        this.network.vertexes.each(function (v) {
+          v.destinationEdges.each(function (de) {
             var dv = de.toVertex;
             var da = dv.actualAngle;
             var sa = v.actualAngle;
@@ -87,7 +94,7 @@ export class RelationWheelComponent implements OnInit {
     function init(element: ElementRef) {
       let $: any = go.GraphObject.make;  // for conciseness in defining templates
 
-      myDiagram = $(go.Diagram, element /*document.querySelector('#myDiagramDiv')*/ , // must be the ID or reference to div
+      myDiagram = $(go.Diagram, element /*document.querySelector('#myDiagramDiv')*/, // must be the ID or reference to div
         {
           initialAutoScale: go.Diagram.Uniform,
           padding: 10,
@@ -103,7 +110,7 @@ export class RelationWheelComponent implements OnInit {
                 sorting: go.CircularLayout.Optimized
               }),
           isReadOnly: true,
-          click: function(e) {  // background click clears any remaining highlighteds
+          click: function (e) {  // background click clears any remaining highlighteds
             e.diagram.startTransaction("clear");
             e.diagram.clearHighlighteds();
             e.diagram.commitTransaction("clear");
@@ -117,14 +124,14 @@ export class RelationWheelComponent implements OnInit {
             selectionAdorned: false,
             locationSpot: go.Spot.Center,  // Node.location is the center of the Shape
             locationObjectName: "SHAPE",
-            mouseEnter: function(e, node) {
+            mouseEnter: function (e, node) {
               node.diagram.clearHighlighteds();
-              node.linksConnected.each(function(l) { highlightLink(l, true); });
+              node.linksConnected.each(function (l) { highlightLink(l, true); });
               node.isHighlighted = true;
               var tb = node.findObject("TEXTBLOCK");
               if (tb !== null) tb.stroke = highlightColor;
             },
-            mouseLeave: function(e, node) {
+            mouseLeave: function (e, node) {
               node.diagram.clearHighlighteds();
               var tb = node.findObject("TEXTBLOCK");
               if (tb !== null) tb.stroke = "black";
@@ -142,7 +149,7 @@ export class RelationWheelComponent implements OnInit {
             },  // so links will go to the shape, not the whole node
             new go.Binding("fill", "color"),
             new go.Binding("stroke", "isHighlighted",
-              function(h) { return h ? highlightColor : "transparent"; })
+              function (h) { return h ? highlightColor : "transparent"; })
               .ofObject()),
           $(go.TextBlock,
             { name: "TEXTBLOCK" },  // for search
@@ -162,15 +169,15 @@ export class RelationWheelComponent implements OnInit {
             routing: go.Link.Normal,
             curve: go.Link.Bezier,
             selectionAdorned: false,
-            mouseEnter: function(e, link) { highlightLink(link, true); },
-            mouseLeave: function(e, link) { highlightLink(link, false); }
+            mouseEnter: function (e, link) { highlightLink(link, true); },
+            mouseLeave: function (e, link) { highlightLink(link, false); }
           },
           $(go.Shape,
             new go.Binding("stroke", "isHighlighted",
-              function(h, shape) { return h ? highlightColor : shape.part.data.color; })
+              function (h, shape) { return h ? highlightColor : shape.part.data.color; })
               .ofObject(),
             new go.Binding("strokeWidth", "isHighlighted",
-              function(h) { return h ? 2 : 1; })
+              function (h) { return h ? 2 : 1; })
               .ofObject())
           // no arrowhead -- assume directionality of relationship need not be shown
         );
@@ -179,36 +186,36 @@ export class RelationWheelComponent implements OnInit {
     }
 
     function generateGraph() {
-     /* var names = [
-        "Joshua", "Daniel", "Robert", "Noah", "Anthony",
-        "Elizabeth", "Addison", "Alexis", "Ella", "Samantha",
-        "Joseph", "Scott", "James", "Ryan", "Benjamin",
-        "Walter", "Gabriel", "Christian", "Nathan", "Simon",
-        "Isabella", "Emma", "Olivia", "Sophia", "Ava",
-        "Emily", "Madison", "Tina", "Elena", "Mia",
-        "Jacob", "Ethan", "Michael", "Alexander", "William",
-        "Natalie", "Grace", "Lily", "Alyssa", "Ashley",
-        "Sarah", "Taylor", "Hannah", "Brianna", "Hailey",
-        "Christopher", "Aiden", "Matthew", "David", "Andrew",
-        "Kaylee", "Juliana", "Leah", "Anna", "Allison",
-        "John", "Samuel", "Tyler", "Dylan", "Jonathan",
-      ];
+      /* var names = [
+         "Joshua", "Daniel", "Robert", "Noah", "Anthony",
+         "Elizabeth", "Addison", "Alexis", "Ella", "Samantha",
+         "Joseph", "Scott", "James", "Ryan", "Benjamin",
+         "Walter", "Gabriel", "Christian", "Nathan", "Simon",
+         "Isabella", "Emma", "Olivia", "Sophia", "Ava",
+         "Emily", "Madison", "Tina", "Elena", "Mia",
+         "Jacob", "Ethan", "Michael", "Alexander", "William",
+         "Natalie", "Grace", "Lily", "Alyssa", "Ashley",
+         "Sarah", "Taylor", "Hannah", "Brianna", "Hailey",
+         "Christopher", "Aiden", "Matthew", "David", "Andrew",
+         "Kaylee", "Juliana", "Leah", "Anna", "Allison",
+         "John", "Samuel", "Tyler", "Dylan", "Jonathan",
+       ];
 
-      var nodeDataArray = names.map( (name, index) => {
-        return new EmployeeNode(index, name, go.Brush.randomColor(128, 240))
-      });
+       var nodeDataArray = names.map( (name, index) => {
+         return new EmployeeNode(index, name, go.Brush.randomColor(128, 240))
+       });
 
 
-      var linkDataArray = [];
-      var num = nodeDataArray.length;
-      for (let i = 0; i < num * 2; i++) {
-        let a = Math.floor(Math.random() * num);
-        let b = Math.floor(Math.random() * num / 4) + 1;
-        linkDataArray.push(
-          new EmployeeRelationship(a, (a + b) % num, go.Brush.randomColor(0, 127))
-        );
-      }
-*/
+       var linkDataArray = [];
+       var num = nodeDataArray.length;
+       for (let i = 0; i < num * 2; i++) {
+         let a = Math.floor(Math.random() * num);
+         let b = Math.floor(Math.random() * num / 4) + 1;
+         linkDataArray.push(
+           new EmployeeRelationship(a, (a + b) % num, go.Brush.randomColor(0, 127))
+         );
+       }
+ */
       myDiagram.model = new go.GraphLinksModel(
         repationshipData.employeeNodes,
         repationshipData.employeeRelations);

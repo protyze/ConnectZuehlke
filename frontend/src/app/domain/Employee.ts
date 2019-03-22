@@ -9,6 +9,7 @@ class EmployeeProfile {
   code: string;
   location?: string;
   jobProfile?: jobProfile;
+  title?: string;
 }
 
 export interface Employee {

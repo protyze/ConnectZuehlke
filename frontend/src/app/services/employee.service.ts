@@ -98,9 +98,12 @@ export class EmployeeService {
       .pipe(catchError(this.handleError('getEmployee', null)));
   }
 
-  getRelationshipData(): Observable<RelationshipData> {
+  getRelationshipData(members: Employee[]): Observable<RelationshipData> {
     return this.http
-      .get<RelationshipData>(`/api/employee/relations`)
+      .get<RelationshipData>(`/api/employee/relations`, {
+        params: new HttpParams()
+          .set('employees', members.map(emp => (emp.employee.code)).join())
+      })
       .pipe(catchError(this.handleError('getRelationshipData', null)));
   }
 
