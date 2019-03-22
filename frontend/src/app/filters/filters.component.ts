@@ -1,9 +1,11 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import {LocationsService} from "../services/locations.service";
+import { CapabilitiesService } from '../services/capabilities.service';
+import { LocationsService } from '../services/locations.service';
 
-import {Filter} from '../domain/Filter';
-import {Location} from "../domain/Location";
+import { Filter } from '../domain/Filter';
+import { Location } from '../domain/Location';
+import { Capability } from '../domain/Capabilities';
 
 @Component({
   selector: 'app-filters',
@@ -15,6 +17,7 @@ export class FiltersComponent implements OnInit {
   @Input() selectedFilters: Filter;
   @Output() filtersChanged = new EventEmitter<Filter>();
 
+  capabilities: Array<Capability> = [];
   locations: Array<Location> = [];
 
   dropdownSettings = {
@@ -27,11 +30,22 @@ export class FiltersComponent implements OnInit {
     allowSearchFilter: true
   };
 
-  constructor(private serviceLocations:LocationsService) {
+  skillsDropdownSettings = {
+    ...this.dropdownSettings,
+    textField: 'name'
+  }
+
+  constructor(private serviceLocations: LocationsService, private serviceCapabilities: CapabilitiesService) {
 
   }
 
   ngOnInit() {
+    this.getCapabilities();
+    this.serviceCapabilities.capabilitiesFetched.subscribe(() => {
+      this.getCapabilities();
+    });
+    this.serviceCapabilities.fetchCapabilities();
+
     this.getLocations();
     this.serviceLocations.locationsFetched.subscribe(() => {
       this.serviceLocations.getLocations();
@@ -40,14 +54,15 @@ export class FiltersComponent implements OnInit {
   }
 
   onFormSubmit(form) {
-    const { numberOfEmployees, locations } = form.value;
+    const { numberOfEmployees, locations, skills } = form.value;
     console.log(form);
 
     if (!form.invalid) {
       this.onFilterChanged({
         ...this.selectedFilters,
         numberOfEmployees,
-        locations
+        locations,
+        skills
       });
     }
   }
@@ -58,5 +73,9 @@ export class FiltersComponent implements OnInit {
 
   getLocations() {
     this.locations = this.serviceLocations.getLocations();
+  }
+
+  getCapabilities() {
+    this.capabilities = this.serviceCapabilities.getCapabilities();
   }
 }

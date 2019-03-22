@@ -1,14 +1,14 @@
-import {Injectable} from '@angular/core';
-import {Subject} from "rxjs";
-import {HttpClient} from "@angular/common/http";
-import {Location} from "../domain/Location";
+import { Injectable } from '@angular/core';
+import { Subject } from "rxjs";
+import { HttpClient } from "@angular/common/http";
+import { Location } from "../domain/Location";
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocationsService {
 
-  private locations: Array<Location> = [];
+  private locations: Array<Location> = [{ id: 1, cityName: 'Bern' }, { id: 2, cityName: 'Luzern' }, { id: 3, cityName: 'Zürich' }];
 
   locationsFetched = new Subject<void>();
 
