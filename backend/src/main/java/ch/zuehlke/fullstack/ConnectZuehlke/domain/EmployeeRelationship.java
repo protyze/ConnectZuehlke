@@ -12,6 +12,17 @@ public class EmployeeRelationship {
         this.color = color;
     }
 
+    public static String getColorForScore(double score) {
+        if (score > 10) {
+            score = 10;
+        }
+        int shift = (int) score * 25;
+        int blue = 255 - shift;
+        int red = shift;
+
+        return "#" + Integer.toHexString(red) + "00" + Integer.toHexString(blue);
+    }
+
     public int getFrom() {
         return from;
     }

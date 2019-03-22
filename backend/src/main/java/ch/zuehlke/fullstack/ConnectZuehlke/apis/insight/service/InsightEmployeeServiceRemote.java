@@ -27,14 +27,11 @@ import static org.springframework.http.HttpMethod.GET;
 public class InsightEmployeeServiceRemote implements InsightEmployeeService {
 
     private final RestTemplate insightRestTemplate;
-    private final ATeamService ateamService;
 
 
     @Autowired
-    public InsightEmployeeServiceRemote(RestTemplate insightRestTemplate,
-                                        ATeamService aTeamService) {
+    public InsightEmployeeServiceRemote(RestTemplate insightRestTemplate) {
         this.insightRestTemplate = insightRestTemplate;
-        this.ateamService = aTeamService;
     }
 
     @Override
@@ -76,7 +73,7 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
             }
             // get employees to create ATeamPairs
             List<Employee> employees = new ArrayList<>();
-            for(EmployeeNode node: employeeNodes) {
+            for (EmployeeNode node : employeeNodes) {
                 try {
                     employees.add(getEmployee(node.getText()));
                 } catch (Exception e) {
@@ -85,18 +82,23 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
             }
             // create all pairs
             List<ATeamPair> aTeamPairs = new ArrayList<>();
-            for(Employee e1: employees) {
-                for(Employee e2: employees) {
+            for (Employee e1 : employees) {
+                for (Employee e2 : employees) {
                     aTeamPairs.add(new ATeamPair(e1, e2));
                 }
             }
             // get scores for Pairs
-            for (ATeamPair currentPair: aTeamPairs) {
-                Double score = ateamService.getScores(currentPair);
-                EmployeeNode from =  getNodeFromList(currentPair.getE1().getCode(), employeeNodes);
-                EmployeeNode to =  getNodeFromList(currentPair.getE2().getCode(), employeeNodes);
+            for (ATeamPair currentPair : aTeamPairs) {
+                Double score = ATeamService.getScores(currentPair);
+                EmployeeNode from = getNodeFromList(currentPair.getE1().getCode(), employeeNodes);
+                EmployeeNode to = getNodeFromList(currentPair.getE2().getCode(), employeeNodes);
                 if (to != null && score != null && from != null) {
-                    relationships.add(new EmployeeRelationship(from.getKey(), to.getKey(), score.toString()));
+                    relationships.add(
+                            new EmployeeRelationship(
+                                    from.getKey(),
+                                    to.getKey(),
+                                    EmployeeRelationship.getColorForScore(score))
+                    );
                 }
             }
             return new RelationshipData(employeeNodes, relationships);
@@ -105,7 +107,7 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
     }
 
     EmployeeNode getNodeFromList(String code, List<EmployeeNode> nodes) {
-        for(EmployeeNode node: nodes) {
+        for (EmployeeNode node : nodes) {
             if (node.getText().toLowerCase().equals(code.toLowerCase())) {
                 return node;
             }
@@ -117,7 +119,7 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
     @Cacheable("employee")
     public Employee getEmployee(String code) {
         ResponseEntity<EmployeeDto> response = null;
-        try{
+        try {
             response = this.insightRestTemplate
                     .getForEntity("/employees/" + code, EmployeeDto.class);
 
@@ -136,7 +138,7 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
 
         Employee employee1 = getEmployee(code1);
         Employee employee2 = getEmployee(code2);
-        if(employee1 == null || employee2 == null) {
+        if (employee1 == null || employee2 == null) {
             return 0.0;
         }
 
@@ -145,9 +147,9 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
 
         int daysTogether = 0;
 
-        for(EmployeeProject project1 : projects1) {
+        for (EmployeeProject project1 : projects1) {
             Optional<EmployeeProject> optionalEmployeeProject = projects2.stream().filter(employeeProject -> employeeProject.getCode().equals(project1.getCode())).findFirst();
-            if(optionalEmployeeProject.isPresent()) {
+            if (optionalEmployeeProject.isPresent()) {
                 EmployeeProject project2 = optionalEmployeeProject.get();
 
                 LocalDate start1 = project1.getFromEffective();
@@ -156,8 +158,8 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
                 LocalDate end2 = project2.getToEffective();
 
                 long interval1 = DAYS.between(start1, end1);
-                long interval2 = start1.isBefore(end2)? DAYS.between(start1, end2): 0;
-                long interval3 = start2.isBefore(end1)? DAYS.between(start2, end1): 0;
+                long interval2 = start1.isBefore(end2) ? DAYS.between(start1, end2) : 0;
+                long interval3 = start2.isBefore(end1) ? DAYS.between(start2, end1) : 0;
                 long interval4 = DAYS.between(start2, end2);
 
                 long daysTogetherOnProject = Math.min(interval1, interval2);
@@ -171,7 +173,7 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
         long days1 = DAYS.between(employee1.getEntryDate(), LocalDate.now());
         long days2 = DAYS.between(employee2.getEntryDate(), LocalDate.now());
 
-        return ((double) daysTogether)/(0.5 * (days1 + days2));
+        return ((double) daysTogether) / (0.5 * (days1 + days2));
     }
 
     @Cacheable("project")

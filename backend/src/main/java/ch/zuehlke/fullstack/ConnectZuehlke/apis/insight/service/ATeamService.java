@@ -12,7 +12,7 @@ public class ATeamService {
     private final InsightOrganisationUnitService organisationUnitService;
     private InsightEmployeeService employeeService;
 
-    Map<ATeamPair, Double> allScoresCached = new HashMap<>();
+    static Map<ATeamPair, Double> allScoresCached = new HashMap<>();
 
     @Autowired
     public ATeamService(InsightOrganisationUnitService organisationUnitService, InsightEmployeeService employeeService) {
@@ -20,8 +20,8 @@ public class ATeamService {
         this.employeeService = employeeService;
     }
 
-    public Double getScores(ATeamPair pair) {
-        return this.allScoresCached.get(pair);
+    public static Double getScores(ATeamPair pair) {
+        return allScoresCached.get(pair);
     }
 
 
