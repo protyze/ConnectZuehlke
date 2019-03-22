@@ -47,7 +47,7 @@ export class EmployeeService {
           .set('locations', filters.locations.map(location => location.cityName).join())
       })
       .subscribe((data: Team[]) => {
-        this.teams = data.map((team, idx) => ({ ...team, score: { value: ((10 - idx) - Math.random()).toFixed(2) } }));
+        this.teams = data.map((team, idx) => ({ ...team, score: { value: parseFloat(((20 - idx) - Math.random()).toFixed(2)) } }));
         this.teamsFetched.next();
       }, this.finishedLoading.bind(this), this.finishedLoading.bind(this));
   }
