@@ -40,7 +40,7 @@ public class OrganisationUnit {
     }
 
     public boolean isFocusGroup() {
-        return this.type == 3;
+        return this.type == 3 || isTopicTeam();
     }
 
     public boolean isTopicTeam() {
