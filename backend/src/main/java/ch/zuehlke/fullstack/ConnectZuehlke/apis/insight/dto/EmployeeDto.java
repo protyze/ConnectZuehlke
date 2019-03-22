@@ -62,7 +62,6 @@ public class EmployeeDto {
         return new Employee(
                 getFirstName(),
                 getLastName(),
-                getCode(),
                 getId(),
                 getLocation(),
                 getJobProfileDto() == null ? new JobProfile("") : getJobProfileDto().toJobProfile(),
