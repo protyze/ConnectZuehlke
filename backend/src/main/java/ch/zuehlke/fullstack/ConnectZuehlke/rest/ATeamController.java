@@ -21,7 +21,7 @@ public class ATeamController {
     }
 
     @GetMapping("/api/ateams")
-    public List<ATeam> loadATeams(@RequestParam int nrOfTeamMembers, @RequestParam("location") Location... locations) {
+    public List<ATeam> loadATeams(@RequestParam int nrOfTeamMembers, @RequestParam("locations") Location... locations) {
         return aTeamService.calculateATeams(nrOfTeamMembers, locations);
     }
 
