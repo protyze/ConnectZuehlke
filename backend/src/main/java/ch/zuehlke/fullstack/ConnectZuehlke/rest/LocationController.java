@@ -10,7 +10,7 @@ import java.util.List;
 @RestController
 public class LocationController {
 
-    @GetMapping("/locations")
+    @GetMapping("/api/locations")
     public List<Location> loadLocations() {
         return Arrays.asList(Location.values());
     }

@@ -48,7 +48,7 @@ export class FiltersComponent implements OnInit {
 
     this.getLocations();
     this.serviceLocations.locationsFetched.subscribe(() => {
-      this.serviceLocations.getLocations();
+      this.getLocations();
     });
     this.serviceLocations.fetchLocations();
   }
