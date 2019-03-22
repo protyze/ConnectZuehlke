@@ -5,15 +5,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties
-public class FocusGroupParticipant   {
+public class GroupParticipant {
     @JsonProperty("Employee")
     private EmployeeDto employee;
 
-    public FocusGroupParticipant(EmployeeDto employee) {
+    public GroupParticipant(EmployeeDto employee) {
         this.employee = employee;
     }
 
-    public FocusGroupParticipant() {
+    public GroupParticipant() {
     }
 
     public EmployeeDto getEmployee() {

@@ -13,22 +13,24 @@ public class Employee {
     private String location;
     private JobProfile jobProfile;
     private LocalDate entryDate;
+    private String title;
 
     private Employee() {
     }
 
     public Employee(int id, String firstName, String lastName) {
-        this(firstName, lastName, id, firstName.substring(0, 1) + lastName.substring(0, 2), "Test", new JobProfile("TestProfile"), LocalDate.of(1980,1,1));
+        this(firstName, lastName, id, "Test", new JobProfile("TestProfile"), LocalDate.of(1980,1,1),"test title");
     }
 
-    public Employee(String firstName, String lastName, int id, String code, String location, JobProfile jobProfile, LocalDate entryDate) {
+    public Employee(String firstName, String lastName, int id, String location, JobProfile jobProfile, LocalDate entryDate, String title) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.id = id;
-        this.code = code.toLowerCase();
+        this.code = firstName.substring(0, 1) + lastName.substring(0, 2);
         this.location = location;
         this.jobProfile = jobProfile;
         this.entryDate = entryDate;
+        this.title = title;
     }
 
     public String getLastName() {
@@ -57,6 +59,10 @@ public class Employee {
 
     public LocalDate getEntryDate() {
         return entryDate;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     @Override

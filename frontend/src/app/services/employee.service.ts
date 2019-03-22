@@ -44,7 +44,7 @@ export class EmployeeService {
       .get('/api/ateams', {
         params: new HttpParams()
           .set('nrOfTeamMembers', filters.numberOfEmployees.toString())
-          .set('skills', filters.skills.map(skill => skill.name).join())
+          .set('locations', filters.locations.map(location => location.cityName).join())
       })
       .subscribe((data: Team[]) => {
         this.teams = data;

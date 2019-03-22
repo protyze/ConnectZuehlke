@@ -23,6 +23,8 @@ public class EmployeeDto {
     private JobProfileDto jobProfileDto;
     @JsonProperty("EntryDate")
     private LocalDateTime entryDate;
+    @JsonProperty("Title")
+    private String title;
 
     public String getLastName() {
         return lastName;
@@ -38,6 +40,10 @@ public class EmployeeDto {
 
     public String getLocation() {
         return location;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public JobProfileDto getJobProfileDto() {
@@ -57,10 +63,10 @@ public class EmployeeDto {
                 getFirstName(),
                 getLastName(),
                 getId(),
-                getCode(),
                 getLocation(),
                 getJobProfileDto() == null? new JobProfile("") : getJobProfileDto().toJobProfile(),
-                getEntryDate().toLocalDate());
+                getEntryDate().toLocalDate(),
+                getTitle());
     }
 
 }

@@ -1,7 +1,7 @@
-import { Capability } from './Capabilities';
+import { Location } from './Location';
 
 export class Filter {
-  skills: Array<Capability> = [];
+  locations: Array<Location> = [];
 
   constructor(public numberOfEmployees = 5) {
   }

@@ -1,6 +1,7 @@
 package ch.zuehlke.fullstack.ConnectZuehlke.apis.insight.service;
 
 import ch.zuehlke.fullstack.ConnectZuehlke.domain.Employee;
+import ch.zuehlke.fullstack.ConnectZuehlke.domain.Location;
 import ch.zuehlke.fullstack.ConnectZuehlke.domain.OrganisationUnit;
 
 import java.util.Arrays;
@@ -29,7 +30,7 @@ public class InsightOrganisationUnitServiceMock implements InsightOrganisationUn
     }
 
     @Override
-    public List<Employee> getParticipantsInOrganisationUnit(String organisationUnitId) {
+    public List<Employee> getParticipantsInOrganisationUnit(String organisationUnitId, Location... locations) {
 
         return null;
     }

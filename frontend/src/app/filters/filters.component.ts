@@ -1,10 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
-import { CapabilitiesService } from '../services/capabilities.service';
+import {LocationsService} from "../services/locations.service";
 
-import { Filter } from '../domain/Filter';
-
-import { Capability } from '../domain/Capabilities';
+import {Filter} from '../domain/Filter';
+import {Location} from "../domain/Location";
 
 @Component({
   selector: 'app-filters',
@@ -16,39 +15,39 @@ export class FiltersComponent implements OnInit {
   @Input() selectedFilters: Filter;
   @Output() filtersChanged = new EventEmitter<Filter>();
 
-  capabilities: Array<Capability> = [];
+  locations: Array<Location> = [];
 
   dropdownSettings = {
     singleSelection: false,
     idField: 'id',
-    textField: 'name',
+    textField: 'cityName',
     selectAllText: 'Select All',
     unSelectAllText: 'UnSelect All',
     itemsShowLimit: 3,
     allowSearchFilter: true
   };
 
-  constructor(private serviceCapabilities: CapabilitiesService) {
+  constructor(private serviceLocations:LocationsService) {
 
   }
 
   ngOnInit() {
-    this.getCapabilities();
-    this.serviceCapabilities.capabilitiesFetched.subscribe(() => {
-      this.getCapabilities();
+    this.getLocations();
+    this.serviceLocations.locationsFetched.subscribe(() => {
+      this.serviceLocations.getLocations();
     });
-    this.serviceCapabilities.fetchCapabilities();
+    this.serviceLocations.fetchLocations();
   }
 
   onFormSubmit(form) {
-    const { numberOfEmployees, skills } = form.value;
+    const { numberOfEmployees, locations } = form.value;
     console.log(form);
 
     if (!form.invalid) {
       this.onFilterChanged({
         ...this.selectedFilters,
         numberOfEmployees,
-        skills
+        locations
       });
     }
   }
@@ -57,7 +56,7 @@ export class FiltersComponent implements OnInit {
     this.filtersChanged.emit(newFilters);
   }
 
-  getCapabilities() {
-    this.capabilities = this.serviceCapabilities.getCapabilities();
+  getLocations() {
+    this.locations = this.serviceLocations.getLocations();
   }
 }

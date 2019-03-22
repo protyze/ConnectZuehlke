@@ -61,7 +61,7 @@ public class ATeamServiceTest {
 
         ATeamService aTeamService = new ATeamService(orgServiceMock);
 
-        List<ATeam> actualATeams = aTeamService.calculateATeams(3);
+        List<ATeam> actualATeams = aTeamService.calculateATeams(3, locations);
 
         assertThat(actualATeams).hasSize(3);
         ATeam aTeam = actualATeams.get(0);
