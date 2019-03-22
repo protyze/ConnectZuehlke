@@ -50,7 +50,7 @@ public class EmployeeDto {
         return jobProfileDto;
     }
 
-    private String getCode() {
+    public String getCode() {
         return code;
     }
 
@@ -62,9 +62,10 @@ public class EmployeeDto {
         return new Employee(
                 getFirstName(),
                 getLastName(),
+                getCode(),
                 getId(),
                 getLocation(),
-                getJobProfileDto() == null? new JobProfile("") : getJobProfileDto().toJobProfile(),
+                getJobProfileDto() == null ? new JobProfile("") : getJobProfileDto().toJobProfile(),
                 getEntryDate().toLocalDate(),
                 getTitle());
     }

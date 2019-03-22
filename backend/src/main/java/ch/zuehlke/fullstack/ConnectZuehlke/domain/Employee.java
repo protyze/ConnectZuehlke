@@ -19,14 +19,14 @@ public class Employee {
     }
 
     public Employee(int id, String firstName, String lastName) {
-        this(firstName, lastName, id, "Test", new JobProfile("TestProfile"), LocalDate.of(1980,1,1),"test title");
+        this(firstName, lastName, "test",id, "Test", new JobProfile("TestProfile"), LocalDate.of(1980,1,1),"test title");
     }
 
-    public Employee(String firstName, String lastName, int id, String location, JobProfile jobProfile, LocalDate entryDate, String title) {
+    public Employee(String firstName, String lastName, String code, int id, String location, JobProfile jobProfile, LocalDate entryDate, String title) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.id = id;
-        this.code = firstName.substring(0, 1) + lastName.substring(0, 2);
+        this.code = code;
         this.location = location;
         this.jobProfile = jobProfile;
         this.entryDate = entryDate;

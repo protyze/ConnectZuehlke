@@ -123,6 +123,7 @@ public class InsightOrganisationUnitServiceRemote implements InsightOrganisation
     private Employee create(EmployeeDto employeeDto) {
         return new Employee(employeeDto.getFirstName(),
                 employeeDto.getLastName(),
+                employeeDto.getCode(),
                 employeeDto.getId(),
                 employeeDto.getLocation(),
                 null,
