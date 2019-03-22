@@ -14,12 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -124,7 +122,8 @@ public class InsightOrganisationUnitServiceRemote implements InsightOrganisation
                 employeeDto.getLocation(),
                 null,
                 null,
-                employeeDto.getTitle());
+                employeeDto.getTitle(),
+                employeeDto.getCode());
     }
 
     private List<OrganisationUnit> getOrganisationUnits() {

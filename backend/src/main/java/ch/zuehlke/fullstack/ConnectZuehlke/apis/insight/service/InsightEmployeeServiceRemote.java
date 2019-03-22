@@ -83,8 +83,14 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
     @Override
     @Cacheable("employee")
     public Employee getEmployee(String code) {
-        ResponseEntity<EmployeeDto> response = this.insightRestTemplate
-                .getForEntity("/employees/" + code, EmployeeDto.class);
+        ResponseEntity<EmployeeDto> response = null;
+        try{
+            response = this.insightRestTemplate
+                    .getForEntity("/employees/" + code, EmployeeDto.class);
+
+        } catch (Exception e) {
+            System.out.println("fuck");
+        }
 
         return response.getBody().toEmployee();
     }
