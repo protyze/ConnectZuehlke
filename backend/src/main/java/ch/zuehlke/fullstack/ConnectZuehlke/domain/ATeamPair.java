@@ -6,6 +6,9 @@ public class ATeamPair  {
     private final Employee e1;
     private final Employee e2;
 
+    private String focusGroup;
+    private String zuehlkeTeam;
+
     public ATeamPair(Employee e1, Employee e2) {
         this.e1 = e1;
         this.e2 = e2;
@@ -31,5 +34,21 @@ public class ATeamPair  {
     @Override
     public int hashCode() {
         return Objects.hash(e1, e2);
+    }
+
+    public void setFocusGroup(String focusGroup) {
+        this.focusGroup = focusGroup;
+    }
+
+    public void setZuehlkeTeam(String zuehlkeTeam) {
+        this.zuehlkeTeam = zuehlkeTeam;
+    }
+
+    public String getFocusGroup() {
+        return focusGroup;
+    }
+
+    public String getZuehlkeTeam() {
+        return zuehlkeTeam;
     }
 }

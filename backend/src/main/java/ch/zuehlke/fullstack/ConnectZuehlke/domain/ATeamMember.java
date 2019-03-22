@@ -31,6 +31,12 @@ public class ATeamMember {
         this.employee = employee;
     }
 
+    public ATeamMember(Employee employee, String focusGroup, String zuehlkeTeam) {
+        this.employee = employee;
+        this.focusGroups = new FocusGroup(focusGroup);
+        this.zuehlkeTeam = new ZuehlkeTeam(zuehlkeTeam);
+    }
+
     public boolean isAvailable() {
         return isAvailable;
     }
@@ -57,6 +63,30 @@ public class ATeamMember {
 
     public Employee getEmployee() {
         return employee;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+
+    public void setGrade(Title grade) {
+        this.grade = grade;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public void setSkills(List<Skill> skills) {
+        this.skills = skills;
+    }
+
+    public void setZuehlkeTeam(ZuehlkeTeam zuehlkeTeam) {
+        this.zuehlkeTeam = zuehlkeTeam;
+    }
+
+    public void setFocusGroups(FocusGroup focusGroups) {
+        this.focusGroups = focusGroups;
     }
 
     @Override
