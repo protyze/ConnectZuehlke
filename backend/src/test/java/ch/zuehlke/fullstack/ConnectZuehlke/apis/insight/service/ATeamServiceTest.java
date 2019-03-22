@@ -3,10 +3,7 @@ package ch.zuehlke.fullstack.ConnectZuehlke.apis.insight.service;
 import ch.zuehlke.fullstack.ConnectZuehlke.domain.*;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -34,21 +31,21 @@ public class ATeamServiceTest {
         Employee e1 = new Employee(1, "e1f", "e1l");
         Employee e2 = new Employee(2, "e2f", "e2l");
         Employee e3 = new Employee(3, "e3f", "e3l");
-        when(orgServiceMock.getParticipantsInOrganisationUnit("1")).thenReturn(Arrays.asList(
+        when(orgServiceMock.getParticipantsInOrganisationUnit("1", new ArrayList<>())).thenReturn(Arrays.asList(
                 e1,
                 e2,
                 e3
                 )
         );
 
-        when(orgServiceMock.getParticipantsInOrganisationUnit("2")).thenReturn(Arrays.asList(
+        when(orgServiceMock.getParticipantsInOrganisationUnit("2", new ArrayList<>())).thenReturn(Arrays.asList(
                 e1,
                 e2
                 )
         );
 
 
-        when(orgServiceMock.getParticipantsInOrganisationUnit("3")).thenReturn(Arrays.asList(
+        when(orgServiceMock.getParticipantsInOrganisationUnit("3", new ArrayList<>())).thenReturn(Arrays.asList(
                 e1,
                 e2
                 )
@@ -57,7 +54,7 @@ public class ATeamServiceTest {
 
         Employee e4 = new Employee(4, "e4f", "e4l");
         Employee e5 = new Employee(5, "e5f", "e5l");
-        when(orgServiceMock.getParticipantsInOrganisationUnit("4")).thenReturn(Arrays.asList(e5, e4));
+        when(orgServiceMock.getParticipantsInOrganisationUnit("4", new ArrayList<>())).thenReturn(Arrays.asList(e5, e4));
 
         ATeamService aTeamService = new ATeamService(orgServiceMock);
 
@@ -83,12 +80,12 @@ public class ATeamServiceTest {
         Employee e3 = new Employee(3, "e3f", "e3l");
         Employee e4 = new Employee(4, "e4f", "e4l");
 
-        when(orgServiceMock.getParticipantsInOrganisationUnit("1")).thenReturn(Arrays.asList(e1, e2));
-        when(orgServiceMock.getParticipantsInOrganisationUnit("2")).thenReturn(Arrays.asList(e3, e4));
+        when(orgServiceMock.getParticipantsInOrganisationUnit("1", new ArrayList<>())).thenReturn(Arrays.asList(e1, e2));
+        when(orgServiceMock.getParticipantsInOrganisationUnit("2", new ArrayList<>())).thenReturn(Arrays.asList(e3, e4));
 
         ATeamService aTeamService = new ATeamService(orgServiceMock);
 
-        Map<ATeamPair, Double> map = aTeamService.calculateScore(orgServiceMock.getFocusGroups());
+        Map<ATeamPair, Double> map = aTeamService.calculateScore(orgServiceMock.getFocusGroups(), new ArrayList<>());
 
         assertEquals(2, map.size());
         assertEquals(1.0, map.get(new ATeamPair(e1, e2)).doubleValue(), 0.0001);
@@ -138,8 +135,8 @@ public class ATeamServiceTest {
         Employee e3 = new Employee(3, "e3f", "e3l");
         Employee e4 = new Employee(4, "e4f", "e4l");
 
-        when(orgServiceMock.getParticipantsInOrganisationUnit("1")).thenReturn(Arrays.asList(e1, e2, e3));
-        when(orgServiceMock.getParticipantsInOrganisationUnit("2")).thenReturn(Arrays.asList(e1, e3, e4));
+        when(orgServiceMock.getParticipantsInOrganisationUnit("1", new ArrayList<>())).thenReturn(Arrays.asList(e1, e2, e3));
+        when(orgServiceMock.getParticipantsInOrganisationUnit("2", new ArrayList<>())).thenReturn(Arrays.asList(e1, e3, e4));
 
         ATeamService aTeamService = new ATeamService(orgServiceMock);
 

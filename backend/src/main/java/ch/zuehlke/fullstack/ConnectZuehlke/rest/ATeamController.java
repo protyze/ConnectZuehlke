@@ -21,8 +21,21 @@ public class ATeamController {
     }
 
     @GetMapping("/api/ateams")
-    public List<ATeam> loadATeams(@RequestParam int nrOfTeamMembers, @RequestParam("location") Location... locations) {
-        return aTeamService.calculateATeams(nrOfTeamMembers, locations);
+    public List<ATeam> loadATeams(@RequestParam int nrOfTeamMembers, @RequestParam("location") String... locations) {
+
+        List<Location> filteredLocation = toLocationEnums(locations);
+        return aTeamService.calculateATeams(nrOfTeamMembers, filteredLocation);
+    }
+
+    private List<Location> toLocationEnums(@RequestParam("location") String[] locations) {
+        List<Location> filteredLocation = new ArrayList<>();
+        for (String locationString : locations) {
+            Optional<Location> locationOptional = Arrays.stream(Location.values())
+                    .filter(l -> locationString.equalsIgnoreCase(l.getCityName().toLowerCase()))
+                    .findFirst();
+            locationOptional.ifPresent(filteredLocation::add);
+        }
+        return filteredLocation;
     }
 
 

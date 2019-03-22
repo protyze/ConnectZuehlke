@@ -17,7 +17,7 @@ public class ATeamService {
     }
 
 
-    public List<ATeam> calculateATeams(int nrOfTeamMembers, Location... locations) {
+    public List<ATeam> calculateATeams(int nrOfTeamMembers, List<Location> locations) {
         Map<ATeamPair, Double> allScores = new HashMap<>();
 
         List<OrganisationUnit> focusGroups = organisationUnitService.getFocusGroups();
@@ -163,7 +163,7 @@ public class ATeamService {
         return combinedScores;
     }
 
-    Map<ATeamPair, Double> calculateScore(List<OrganisationUnit> organisationUnits, Location... locations) {
+    Map<ATeamPair, Double> calculateScore(List<OrganisationUnit> organisationUnits, List<Location> locations) {
         Map<ATeamPair, Double> scorePairs = new HashMap<>();
 
         for (OrganisationUnit organisationUnit : organisationUnits) {
