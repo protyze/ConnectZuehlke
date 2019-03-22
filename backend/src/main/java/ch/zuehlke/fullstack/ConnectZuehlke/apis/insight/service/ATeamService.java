@@ -4,7 +4,6 @@ import ch.zuehlke.fullstack.ConnectZuehlke.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 @Service("aTeamService")
@@ -35,27 +34,55 @@ public class ATeamService {
 
         ArrayList<ATeam> aTeams = new ArrayList<>();
         while (!allScores.isEmpty() && aTeams.size() <= 3) {
-            ATeamPair pairWithHighestScore = findPairWithHighestScore(allScores);
-            allScores.remove(pairWithHighestScore);
-
-            List<ATeamMember> aTeamMembers = new ArrayList<>();
-            aTeamMembers.add(new ATeamMember(pairWithHighestScore.getE1()));
-            aTeamMembers.add(new ATeamMember(pairWithHighestScore.getE2()));
-            int newNumberOfTeamMembers = nrOfTeamMembers - 2;
-
-            List<ATeamMember> aTeamMembers1 = new ArrayList<>();
-            getNextTeamMember(allScores, aTeamMembers1, pairWithHighestScore.getE1(), newNumberOfTeamMembers);
-            aTeamMembers.addAll(aTeamMembers1);
-
-            List<ATeamMember> aTeamMembers2 = new ArrayList<>();
-            getNextTeamMember(allScores, aTeamMembers2, pairWithHighestScore.getE2(), newNumberOfTeamMembers);
-            aTeamMembers.addAll(aTeamMembers2);
-
-            ATeam aTeam = new ATeam(aTeamMembers, new Score(1.0));
+            ATeam aTeam = calculateTeam(nrOfTeamMembers, allScores);
             aTeams.add(aTeam);
         }
 
         return aTeams;
+    }
+
+    ATeam calculateTeam(int nrOfTeamMembers, Map<ATeamPair, Double> allScores) {
+        ATeamPair pairWithHighestScore = findPairWithHighestScore(allScores);
+        allScores.remove(pairWithHighestScore);
+
+        List<ATeamMember> aTeamMembers = new ArrayList<>();
+        aTeamMembers.add(new ATeamMember(pairWithHighestScore.getE1()));
+        aTeamMembers.add(new ATeamMember(pairWithHighestScore.getE2()));
+        int newNumberOfTeamMembers = nrOfTeamMembers - 2;
+
+        int firstEmployeeNumberOfFriends = newNumberOfTeamMembers / 2;
+        int secondEmployeeNumberOfFriends = newNumberOfTeamMembers - firstEmployeeNumberOfFriends;
+
+        List<ATeamMember> allTeamMembersOfFirstEmployee = findNextPairs(allScores, firstEmployeeNumberOfFriends, pairWithHighestScore.getE1());
+        aTeamMembers.addAll(allTeamMembersOfFirstEmployee);
+
+        List<ATeamMember> allTeamMembersOfSecondEmployee = findNextPairs(allScores, secondEmployeeNumberOfFriends, pairWithHighestScore.getE2());
+        aTeamMembers.addAll(allTeamMembersOfSecondEmployee);
+
+        return new ATeam(aTeamMembers, new Score(1.0));
+    }
+
+    private List<ATeamMember> findNextPairs(Map<ATeamPair, Double> allScores, int numberOfFriends, Employee employee) {
+
+        List<ATeamMember> teamMembers = new ArrayList<>();
+        ATeamPair nextPair;
+        for (int i = 0; i < numberOfFriends; ++i) {
+            if (allScores.isEmpty()) {
+                break;
+            }
+            nextPair = getNextBestPair(allScores, employee);
+            if (nextPair == null) {
+                break;
+            }
+            ATeamMember nextMember = getNextMemberNot(nextPair, employee);
+
+            if (!teamMembers.contains(nextMember)) {
+                teamMembers.add(nextMember);
+                allScores.remove(nextPair);
+            }
+        }
+
+        return teamMembers;
     }
 
     private void getNextTeamMember(Map<ATeamPair, Double> allScores, List<ATeamMember> aTeamMembers, Employee employee, int numberOfTeamMembers) {
@@ -95,8 +122,8 @@ public class ATeamService {
 
     }
 
-    private ATeamMember getNextMemberNot(ATeamPair nextPairOfOne, Employee e1) {
-        if (nextPairOfOne.getE1().equals(e1)) {
+    private ATeamMember getNextMemberNot(ATeamPair nextPairOfOne, Employee employee) {
+        if (nextPairOfOne.getE1().equals(employee)) {
             return new ATeamMember(nextPairOfOne.getE2());
         } else {
             return new ATeamMember(nextPairOfOne.getE1());
