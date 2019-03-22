@@ -1,4 +1,4 @@
-<mat-card class="w-100">
+<mat-card class="w-100" *ngIf="employee">
   <mat-card-title class="text-truncate">{{employee.employee.firstName}} {{employee.employee.lastName}}</mat-card-title>
   <app-employee-image *ngIf="employee.employee" [employeeId]="employee.employee.id"></app-employee-image>
   <mat-card-content>
