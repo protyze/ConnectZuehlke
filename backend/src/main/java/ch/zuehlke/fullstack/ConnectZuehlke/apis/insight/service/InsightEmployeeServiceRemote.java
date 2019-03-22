@@ -8,6 +8,7 @@ import ch.zuehlke.fullstack.ConnectZuehlke.domain.EmployeeRelationship;
 import ch.zuehlke.fullstack.ConnectZuehlke.domain.RelationshipData;
 import ch.zuehlke.fullstack.ConnectZuehlke.domain.EmployeeProject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -80,6 +81,7 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
     }
 
     @Override
+    @Cacheable("employee")
     public Employee getEmployee(String code) {
         ResponseEntity<EmployeeDto> response = this.insightRestTemplate
                 .getForEntity("/employees/" + code, EmployeeDto.class);
@@ -89,13 +91,8 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
 
     @Override
     public double getWorkedWith(String code1, String code2) {
-        ResponseEntity<List<EmployeeProjectDto>> response1 = this.insightRestTemplate
-                .exchange("/employees/" + code1 + "/projects/history", GET, null, new ParameterizedTypeReference<List<EmployeeProjectDto>>() {
-                });
-
-        ResponseEntity<List<EmployeeProjectDto>> response2 = this.insightRestTemplate
-                .exchange("/employees/" + code2 + "/projects/history", GET, null, new ParameterizedTypeReference<List<EmployeeProjectDto>>() {
-                });
+        ResponseEntity<List<EmployeeProjectDto>> response1 = getEmployeeProjects(code1);
+        ResponseEntity<List<EmployeeProjectDto>> response2 = getEmployeeProjects(code2);
 
         Employee employee1 = getEmployee(code1);
         Employee employee2 = getEmployee(code2);
@@ -132,6 +129,13 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
         long days2 = DAYS.between(employee2.getEntryDate(), LocalDate.now());
 
         return ((double) daysTogether)/(0.5 * (days1 + days2));
+    }
+
+    @Cacheable("project")
+    public ResponseEntity<List<EmployeeProjectDto>> getEmployeeProjects(String code1) {
+        return this.insightRestTemplate
+                .exchange("/employees/" + code1 + "/projects/history", GET, null, new ParameterizedTypeReference<List<EmployeeProjectDto>>() {
+                });
     }
 
     private List<EmployeeProject> getCustomerProjects(ResponseEntity<List<EmployeeProjectDto>> response1) {
