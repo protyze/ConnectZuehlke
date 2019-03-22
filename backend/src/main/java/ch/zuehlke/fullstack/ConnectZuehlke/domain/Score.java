@@ -3,7 +3,7 @@ package ch.zuehlke.fullstack.ConnectZuehlke.domain;
 import java.util.Objects;
 
 public class Score implements Comparable<Score> {
-    private Double value;
+    private Double value=0.0;
 
     public Score(Double value) {
         this.value = value;

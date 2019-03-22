@@ -34,10 +34,6 @@ public class ATeamService {
 
         allScores = combineValues(allScores, aTeamsByZuehlkeTeam);
 
-        for (ATeamPair teamPair : allScores.keySet()) {
-            double workedWithScore = employeeService.getWorkedWith(teamPair.getE1().getCode(), teamPair.getE2().getCode());
-            allScores.put(teamPair, allScores.get(teamPair).doubleValue() + workedWithScore);
-        }
 
         ArrayList<ATeam> aTeams = new ArrayList<>();
         while (!allScores.isEmpty() && aTeams.size() <= 3) {
@@ -45,6 +41,21 @@ public class ATeamService {
             aTeams.add(aTeam);
         }
 
+        int count = 0;
+        for (ATeam aTeam : aTeams) {
+            System.out.println("Team: " + count++);
+            for(int i = 0; i<nrOfTeamMembers -1; i++) {
+                for(int j= i+1; j<nrOfTeamMembers; j++) {
+                    Employee employee1 = aTeam.getTeamMembers().get(i).getEmployee();
+                    Employee employee2 = aTeam.getTeamMembers().get(j).getEmployee();
+                    double workedWithScore = employeeService.getWorkedWith(employee1.getCode(), employee2.getCode());
+                    aTeam.setScore(new Score(aTeam.getScore().getValue() + workedWithScore));
+                }
+            }
+            System.out.println("done!");
+        }
+
+        Collections.sort(aTeams);
         return aTeams;
     }
 
