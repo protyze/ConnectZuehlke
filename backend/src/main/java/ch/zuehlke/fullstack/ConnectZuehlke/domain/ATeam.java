@@ -11,6 +11,10 @@ public class ATeam implements Comparable<ATeam>{
         this.score = score;
     }
 
+    public ATeam() {
+
+    }
+
     public List<ATeamMember> getTeamMembers() {
         return teamMembers;
     }

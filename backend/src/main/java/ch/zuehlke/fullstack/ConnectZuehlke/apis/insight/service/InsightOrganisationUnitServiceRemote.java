@@ -7,6 +7,7 @@ import ch.zuehlke.fullstack.ConnectZuehlke.domain.GroupParticipant;
 import ch.zuehlke.fullstack.ConnectZuehlke.domain.Location;
 import ch.zuehlke.fullstack.ConnectZuehlke.domain.OrganisationUnit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,7 @@ public class InsightOrganisationUnitServiceRemote implements InsightOrganisation
     }
 
     @Override
+    @Cacheable("organisationUnits")
     public List<OrganisationUnit> getTeams() {
         List<OrganisationUnit> units = getOrganisationUnits();
         return units.stream()
@@ -43,6 +45,7 @@ public class InsightOrganisationUnitServiceRemote implements InsightOrganisation
     }
 
     @Override
+    @Cacheable("organisationUnits")
     public List<OrganisationUnit> getFocusGroups() {
         List<OrganisationUnit> list = getOrganisationUnits();
         return list.stream()
@@ -51,6 +54,7 @@ public class InsightOrganisationUnitServiceRemote implements InsightOrganisation
     }
 
     @Override
+    @Cacheable("organisationUnits")
     public List<OrganisationUnit> getTopicTeams() {
         List<OrganisationUnit> list = getOrganisationUnits();
         return list.stream()
@@ -59,6 +63,7 @@ public class InsightOrganisationUnitServiceRemote implements InsightOrganisation
     }
 
     @Override
+    @Cacheable("organisationUnits")
     public List<OrganisationUnit> getOrganisationStructures() {
         List<OrganisationUnit> list = getOrganisationUnits();
         return list.stream()
@@ -66,6 +71,7 @@ public class InsightOrganisationUnitServiceRemote implements InsightOrganisation
                 .collect(toList());
     }
 
+    @Cacheable("organisationUnitsParticipants")
     @Override
     public List<Employee> getParticipantsInOrganisationUnit(String organisationUnitId, Location... locations) {
         ResponseEntity<List<GroupParticipant>> response = this.insightRestTemplate

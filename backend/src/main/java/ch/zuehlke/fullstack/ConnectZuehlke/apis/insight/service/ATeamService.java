@@ -33,72 +33,94 @@ public class ATeamService {
         allScores = combineValues(allScores, aTeamsByZuehlkeTeam);
 
         ArrayList<ATeam> aTeams = new ArrayList<>();
-        while (!allScores.isEmpty() && aTeams.size() <= 4) {
-            ATeamPair pairWithHighestScore = findPairWithHighestScore(allScores);
-            allScores.remove(pairWithHighestScore);
-
-            List<ATeamMember> aTeamMembers = new ArrayList<>();
-            aTeamMembers.add(new ATeamMember(pairWithHighestScore.getE1()));
-            aTeamMembers.add(new ATeamMember(pairWithHighestScore.getE2()));
-            int newNumberOfTeamMembers = nrOfTeamMembers - 2;
-
-            if (newNumberOfTeamMembers <= 0) {
-                break;
-            }
-            List<ATeamMember> aTeamMembers1 = new ArrayList<>();
-            getNextTeamMember(allScores, aTeamMembers1, pairWithHighestScore.getE1(), newNumberOfTeamMembers);
-            aTeamMembers.addAll(aTeamMembers1);
-
-            List<ATeamMember> aTeamMembers2 = new ArrayList<>();
-            getNextTeamMember(allScores, aTeamMembers2, pairWithHighestScore.getE2(), newNumberOfTeamMembers);
-            aTeamMembers.addAll(aTeamMembers2);
-
-            ATeam aTeam = new ATeam(aTeamMembers, new Score(1.0));
+        while (!allScores.isEmpty() && aTeams.size() <= 3) {
+            ATeam aTeam = calculateTeam(nrOfTeamMembers, allScores);
             aTeams.add(aTeam);
         }
 
         return aTeams;
     }
 
-    private void getNextTeamMember(Map<ATeamPair, Double> allScores, List<ATeamMember> aTeamMembers, Employee employee, int numberOfTeamMembers) {
-        if (aTeamMembers.size() == numberOfTeamMembers / 2) {
-            return;
+    ATeam calculateTeam(int nrOfTeamMembers, Map<ATeamPair, Double> allScores) {
+        ATeamPair pairWithHighestScore = findPairWithHighestScore(allScores);
+        if (pairWithHighestScore == null) {
+            return new ATeam();
         }
-        if (allScores.size() == 0) {
-            return;
-        }
-        ATeamPair nextPair = getNextBestPair(allScores, employee);
-        if (nextPair == null) {
-            return;
-        }
-        ATeamMember nextMember = getNextMemberNot(nextPair, employee);
+        allScores.remove(pairWithHighestScore);
 
-        if (!aTeamMembers.contains(nextMember)) {
-            aTeamMembers.add(nextMember);
-            allScores.remove(nextPair);
-            getNextTeamMember(allScores, aTeamMembers, nextMember.getEmployee(), numberOfTeamMembers);
+        List<ATeamMember> allTeamMembers = new ArrayList<>();
+        allTeamMembers.add(new ATeamMember(pairWithHighestScore.getE1()));
+        allTeamMembers.add(new ATeamMember(pairWithHighestScore.getE2()));
+        int newNumberOfTeamMembers = nrOfTeamMembers - 2;
+
+        int firstEmployeeNumberOfFriends = newNumberOfTeamMembers / 2;
+        int secondEmployeeNumberOfFriends = newNumberOfTeamMembers - firstEmployeeNumberOfFriends;
+
+        List<ATeamMember> allTeamMembersOfFirstEmployee = findNextPairs(allScores, firstEmployeeNumberOfFriends, pairWithHighestScore.getE1(), allTeamMembers);
+        allTeamMembers.addAll(allTeamMembersOfFirstEmployee);
+
+        List<ATeamMember> allTeamMembersOfSecondEmployee = findNextPairs(allScores, secondEmployeeNumberOfFriends, pairWithHighestScore.getE2(), allTeamMembers);
+        allTeamMembers.addAll(allTeamMembersOfSecondEmployee);
+
+        return new ATeam(allTeamMembers, new Score(1.0));
+    }
+
+    List<ATeamMember> findNextPairs(Map<ATeamPair, Double> allScores, int numberOfFriends, Employee employee, List<ATeamMember> allTeamMembers) {
+        List<ATeamMember> teamMembers = new ArrayList<>();
+        ATeamPair nextPair;
+        for (int i = 0; i < numberOfFriends; ++i) {
+            if (allScores.isEmpty()) {
+                break;
+            }
+
+            ATeamMember nextMember = null;
+            do {
+                nextPair = getNextBestPair(allScores, employee);
+                if (nextPair == null) {
+                    break;
+                }
+
+                nextMember = getNextMemberNot(nextPair, employee);
+                allScores.remove(nextPair);
+            } while (allTeamMembers.contains(nextMember));
+
+            if (!teamMembers.contains(nextMember)) {
+                teamMembers.add(nextMember);
+                allScores.remove(nextPair);
+            }
+
         }
+
+        return teamMembers;
     }
 
     private ATeamPair getNextBestPair(Map<ATeamPair, Double> allScores, Employee employee) {
-        TreeMap<Double, ATeamPair> nextPairs = new TreeMap<>();
+        TreeMap<Double, List<ATeamPair>> nextPairs = new TreeMap<>(Comparator.reverseOrder());
         for (Map.Entry<ATeamPair, Double> aTeamPair : allScores.entrySet()) {
             ATeamPair nextPair = aTeamPair.getKey();
             if (employee.equals(nextPair.getE1()) || employee.equals(nextPair.getE2())) {
                 Double score = aTeamPair.getValue();
-                nextPairs.put(score, nextPair);
+                if (nextPairs.containsKey(score)) {
+                    nextPairs.get(score).add(nextPair);
+                } else {
+                    ArrayList<ATeamPair> pairs = new ArrayList<>();
+                    pairs.add(nextPair);
+                    nextPairs.put(score, pairs);
+                }
             }
         }
-        Map.Entry<Double, ATeamPair> doubleATeamPairEntry = nextPairs.firstEntry();
-        if (doubleATeamPairEntry == null) {
+        Map.Entry<Double, List<ATeamPair>> bestPairs = nextPairs.firstEntry();
+
+        if (bestPairs == null || bestPairs.getValue() == null || bestPairs.getValue().get(0) == null) {
             return null;
         }
-        return doubleATeamPairEntry.getValue();
+
+        return bestPairs.getValue().get(0);
 
     }
 
-    private ATeamMember getNextMemberNot(ATeamPair nextPairOfOne, Employee e1) {
-        if (nextPairOfOne.getE1().equals(e1)) {
+    private ATeamMember getNextMemberNot(ATeamPair nextPairOfOne, Employee employee) {
+        if (nextPairOfOne.getE1().equals(employee)) {
             return new ATeamMember(nextPairOfOne.getE2());
         } else {
             return new ATeamMember(nextPairOfOne.getE1());
@@ -106,12 +128,22 @@ public class ATeamService {
     }
 
     private ATeamPair findPairWithHighestScore(Map<ATeamPair, Double> allScores) {
-        TreeMap<Double, ATeamPair> scoreMap = new TreeMap<>();
+        TreeMap<Double, List<ATeamPair>> scoreMap = new TreeMap<>(Comparator.reverseOrder());
         for (Map.Entry<ATeamPair, Double> teamToScore : allScores.entrySet()) {
-            scoreMap.put(teamToScore.getValue(), teamToScore.getKey());
+            if (scoreMap.containsKey(teamToScore.getValue())) {
+                scoreMap.get(teamToScore.getValue()).add(teamToScore.getKey());
+            } else {
+                List<ATeamPair> teamPairs = new ArrayList<>();
+                teamPairs.add(teamToScore.getKey());
+                scoreMap.put(teamToScore.getValue(), teamPairs);
+            }
         }
 
-        return scoreMap.firstEntry().getValue();
+        Map.Entry<Double, List<ATeamPair>> firstEntry = scoreMap.firstEntry();
+        if (firstEntry == null || firstEntry.getValue() == null || firstEntry.getValue().get(0) == null) {
+            return null;
+        }
+        return firstEntry.getValue().get(0);
 
     }
 
