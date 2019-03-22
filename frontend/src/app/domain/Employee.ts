@@ -2,6 +2,14 @@ class jobProfile {
   name: string;
 }
 
+class ZuehlkeTeam {
+  teamName: string;
+}
+
+class FocusGroup {
+  name: string;
+}
+
 class EmployeeProfile {
   firstName: string;
   lastName: string;
@@ -19,5 +27,6 @@ export interface Employee {
   grade?: string;
   unit?: string;
   skills?: Array<string>;
-  focusGroups?: Array<string>;
+  focusGroups?: FocusGroup;
+  zuehlkeTeam?: ZuehlkeTeam;
 }
