@@ -28,17 +28,17 @@ public class ATeamService {
     public List<ATeam> calculateATeams(int nrOfTeamMembers, List<Location> locations) {
         Map<ATeamPair, Double> allScores = new HashMap<>();
 
-        List<OrganisationUnit> focusGroups = organisationUnitService.getFocusGroups();
-
-        Map<ATeamPair, Double> aTeamsByFocusGroup = calculateScore(focusGroups, locations);
-
-        allScores.putAll(aTeamsByFocusGroup);
-
         List<OrganisationUnit> zuehlkeTeams = organisationUnitService.getTeams();
 
         Map<ATeamPair, Double> aTeamsByZuehlkeTeam = calculateScore(zuehlkeTeams, locations);
 
-        allScores = combineValues(allScores, aTeamsByZuehlkeTeam);
+        allScores.putAll(aTeamsByZuehlkeTeam);
+
+        List<OrganisationUnit> focusGroups = organisationUnitService.getFocusGroups();
+
+        Map<ATeamPair, Double> aTeamsByFocusGroup = calculateScore(focusGroups, locations);
+
+        allScores = combineValues(allScores, aTeamsByFocusGroup);
 
         cacheScores(allScores);
 
@@ -48,21 +48,21 @@ public class ATeamService {
             aTeams.add(aTeam);
         }
 
-//        int count = 0;
-//        for (ATeam aTeam : aTeams) {
-//            System.out.println("Team: " + count++);
-//            for (int i = 0; i < nrOfTeamMembers - 1; i++) {
-//                for (int j = i + 1; j < nrOfTeamMembers; j++) {
-//                    Employee employee1 = aTeam.getTeamMembers().get(i).getEmployee();
-//                    Employee employee2 = aTeam.getTeamMembers().get(j).getEmployee();
-//                    double workedWithScore = employeeService.getWorkedWith(employee1.getCode(), employee2.getCode());
-//                    aTeam.setScore(new Score(aTeam.getScore().getValue() + workedWithScore));
-//                }
-//            }
-//            System.out.println("done!");
-//        }
-//
-//        Collections.sort(aTeams);
+        int count = 0;
+        for (ATeam aTeam : aTeams) {
+            System.out.println("Team: " + count++);
+            for (int i = 0; i < nrOfTeamMembers - 1; i++) {
+                for (int j = i + 1; j < nrOfTeamMembers; j++) {
+                    Employee employee1 = aTeam.getTeamMembers().get(i).getEmployee();
+                    Employee employee2 = aTeam.getTeamMembers().get(j).getEmployee();
+                    double workedWithScore = employeeService.getWorkedWith(employee1.getCode(), employee2.getCode());
+                    aTeam.setScore(new Score(aTeam.getScore().getValue() + workedWithScore * 3));
+                }
+            }
+            System.out.println("done!");
+        }
+
+        Collections.sort(aTeams);
         return aTeams;
     }
 
@@ -214,9 +214,11 @@ public class ATeamService {
                             pair2.setZuehlkeTeam(organisationUnit.getName());
                         }
                         if (scorePairs.containsKey(pair) || scorePairs.containsKey(pair2)) {
+                            double workedWith1 = employeeService.getWorkedWith(pair.getE1().getCode(), pair.getE2().getCode());
                             Double val1 = scorePairs.get(pair);
+                            double workedWith2 = employeeService.getWorkedWith(pair2.getE1().getCode(), pair2.getE2().getCode());
                             Double val2 = scorePairs.get(pair2);
-                            scorePairs.put(val1 == null ? pair2 : pair, (val1 == null ? val2 : val1) + 1.0);
+                            scorePairs.put(val1 == null ? pair2 : pair, (val1 == null ? val2 * workedWith2: val1 * workedWith1) + 1.0);
                         } else {
                             scorePairs.put(pair, 1.0);
                         }
