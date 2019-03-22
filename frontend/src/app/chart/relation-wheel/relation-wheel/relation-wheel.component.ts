@@ -216,6 +216,10 @@ export class RelationWheelComponent implements OnInit {
          );
        }
  */
+      repationshipData.employeeNodes.forEach(node =>  {
+        node.color = go.Brush.randomColor(0, 127);
+      });
+
       myDiagram.model = new go.GraphLinksModel(
         repationshipData.employeeNodes,
         repationshipData.employeeRelations);
