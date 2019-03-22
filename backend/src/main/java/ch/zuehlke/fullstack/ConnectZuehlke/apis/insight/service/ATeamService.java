@@ -187,12 +187,29 @@ public class ATeamService {
             if (allScores.containsKey(key) || allScores.containsKey(key2)) {
                 Double val1 = allScores.get(key);
                 Double val2 = allScores.get(key2);
+                setGroups(key, key2);
                 combinedScores.put(val1 == null ? key2 : key, aTeamPair.getValue() + (val1 == null ? val2 : val1));
             } else {
                 combinedScores.put(key, aTeamPair.getValue());
             }
         }
         return combinedScores;
+    }
+
+    private void setGroups(ATeamPair key, ATeamPair key2) {
+        if (key.getFocusGroup() != null && key2.getFocusGroup() == null) {
+            key2.setFocusGroup(key.getFocusGroup());
+        }
+        if (key2.getFocusGroup() != null && key.getFocusGroup() == null) {
+            key.setFocusGroup(key2.getFocusGroup());
+        }
+        if (key.getZuehlkeTeam() != null && key2.getZuehlkeTeam() == null) {
+            key2.setZuehlkeTeam(key.getZuehlkeTeam());
+        }
+        if (key2.getZuehlkeTeam() != null && key.getZuehlkeTeam() == null) {
+            key.setZuehlkeTeam(key2.getZuehlkeTeam());
+        }
+
     }
 
     Map<ATeamPair, Double> calculateScore(List<OrganisationUnit> organisationUnits, List<Location> locations) {
@@ -209,7 +226,8 @@ public class ATeamService {
                         if (organisationUnit.isFocusGroup()) {
                             pair.setFocusGroup(organisationUnit.getName());
                             pair2.setFocusGroup(organisationUnit.getName());
-                        } else if (organisationUnit.isTeam()) {
+                        }
+                        if (organisationUnit.isTeam()) {
                             pair.setZuehlkeTeam(organisationUnit.getName());
                             pair2.setZuehlkeTeam(organisationUnit.getName());
                         }

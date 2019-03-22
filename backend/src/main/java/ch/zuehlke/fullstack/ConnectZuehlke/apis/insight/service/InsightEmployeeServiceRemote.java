@@ -68,7 +68,7 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
 
             String[] split = codes.split(",");
             for (int i = 0; i < split.length; i++) {
-                employeeNodes.add(new EmployeeNode(i, split[i].toLowerCase(), "#b1a0e7"));
+                employeeNodes.add(new EmployeeNode(i, split[i].toLowerCase(), null));
             }
             // get employees to create ATeamPairs
             List<Employee> employees = new ArrayList<>();
