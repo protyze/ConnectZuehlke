@@ -1,9 +1,17 @@
-<mat-card class="w-100">
+<mat-card class="w-100" *ngIf="employee">
   <mat-card-title class="text-truncate">{{employee.employee.firstName}} {{employee.employee.lastName}}</mat-card-title>
   <app-employee-image *ngIf="employee.employee" [employeeId]="employee.employee.id"></app-employee-image>
   <mat-card-content>
     <div class="row mt-3" *ngIf="employee.employee && employee.employee.title">
       <div class="col"><strong>{{employee.employee.title}}</strong></div>
+    </div>
+    <div class="row mt-3">
+      <div class="col">
+        <strong>Location</strong>
+      </div>
+      <div class="col" *ngIf="employee.employee">
+        {{employee.employee.location}}
+      </div>
     </div>
   </mat-card-content>
   <mat-card-actions *ngIf="employee.employee">

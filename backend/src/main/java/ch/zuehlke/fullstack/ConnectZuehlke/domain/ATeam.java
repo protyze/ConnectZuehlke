@@ -23,6 +23,10 @@ public class ATeam implements Comparable<ATeam>{
         return score;
     }
 
+    public void setScore(Score score) {
+        this.score = score;
+    }
+
     @Override
     public int compareTo(ATeam o) {
         return score.compareTo(o.score);

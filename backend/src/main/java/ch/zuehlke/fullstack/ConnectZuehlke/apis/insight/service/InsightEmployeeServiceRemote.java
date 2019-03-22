@@ -4,6 +4,7 @@ import ch.zuehlke.fullstack.ConnectZuehlke.apis.insight.dto.EmployeeDto;
 import ch.zuehlke.fullstack.ConnectZuehlke.apis.insight.dto.EmployeeProjectDto;
 import ch.zuehlke.fullstack.ConnectZuehlke.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -113,25 +114,31 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
     }
 
     @Override
+    @Cacheable("employee")
     public Employee getEmployee(String code) {
-        ResponseEntity<EmployeeDto> response = this.insightRestTemplate
-                .getForEntity("/employees/" + code, EmployeeDto.class);
+        ResponseEntity<EmployeeDto> response = null;
+        try{
+            response = this.insightRestTemplate
+                    .getForEntity("/employees/" + code, EmployeeDto.class);
+
+        } catch (Exception e) {
+            System.out.println("fuck");
+            return null;
+        }
 
         return response.getBody().toEmployee();
     }
 
     @Override
     public double getWorkedWith(String code1, String code2) {
-        ResponseEntity<List<EmployeeProjectDto>> response1 = this.insightRestTemplate
-                .exchange("/employees/" + code1 + "/projects/history", GET, null, new ParameterizedTypeReference<List<EmployeeProjectDto>>() {
-                });
-
-        ResponseEntity<List<EmployeeProjectDto>> response2 = this.insightRestTemplate
-                .exchange("/employees/" + code2 + "/projects/history", GET, null, new ParameterizedTypeReference<List<EmployeeProjectDto>>() {
-                });
+        ResponseEntity<List<EmployeeProjectDto>> response1 = getEmployeeProjects(code1);
+        ResponseEntity<List<EmployeeProjectDto>> response2 = getEmployeeProjects(code2);
 
         Employee employee1 = getEmployee(code1);
         Employee employee2 = getEmployee(code2);
+        if(employee1 == null || employee2 == null) {
+            return 0.0;
+        }
 
         List<EmployeeProject> projects1 = getCustomerProjects(response1);
         List<EmployeeProject> projects2 = getCustomerProjects(response2);
@@ -165,6 +172,13 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
         long days2 = DAYS.between(employee2.getEntryDate(), LocalDate.now());
 
         return ((double) daysTogether)/(0.5 * (days1 + days2));
+    }
+
+    @Cacheable("project")
+    public ResponseEntity<List<EmployeeProjectDto>> getEmployeeProjects(String code1) {
+        return this.insightRestTemplate
+                .exchange("/employees/" + code1 + "/projects/history", GET, null, new ParameterizedTypeReference<List<EmployeeProjectDto>>() {
+                });
     }
 
     private List<EmployeeProject> getCustomerProjects(ResponseEntity<List<EmployeeProjectDto>> response1) {

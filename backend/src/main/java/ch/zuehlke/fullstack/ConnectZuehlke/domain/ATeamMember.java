@@ -59,6 +59,30 @@ public class ATeamMember {
         return employee;
     }
 
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+
+    public void setGrade(Title grade) {
+        this.grade = grade;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public void setSkills(List<Skill> skills) {
+        this.skills = skills;
+    }
+
+    public void setZuehlkeTeam(ZuehlkeTeam zuehlkeTeam) {
+        this.zuehlkeTeam = zuehlkeTeam;
+    }
+
+    public void setFocusGroups(FocusGroup focusGroups) {
+        this.focusGroups = focusGroups;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

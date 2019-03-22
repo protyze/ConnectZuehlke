@@ -14,6 +14,7 @@ export class TeamGeneratorComponent implements OnInit, OnDestroy {
   filters = new Filter(7);
   teamsResults: Array<Team> = [];
   isLoading = false;
+  playTheme = false;
 
   constructor(private employeeService: EmployeeService) {
   }
@@ -35,6 +36,7 @@ export class TeamGeneratorComponent implements OnInit, OnDestroy {
   onFilterChanged(filters: Filter) {
     this.filters = filters;
     this.employeeService.fetchTeams(filters);
+    this.playTheme = true;
   }
 
   getTeams() {
@@ -43,6 +45,10 @@ export class TeamGeneratorComponent implements OnInit, OnDestroy {
 
   getLoadingState() {
     this.isLoading = this.employeeService.isLoading();
+  }
+
+  onFinishedPlaying() {
+    this.playTheme = false;
   }
 
   ngOnDestroy() {

@@ -10,12 +10,14 @@ import java.util.*;
 public class ATeamService {
 
     private final InsightOrganisationUnitService organisationUnitService;
+    private InsightEmployeeService employeeService;
 
     Map<ATeamPair, Double> allScoresCached = new HashMap<>();
 
     @Autowired
-    public ATeamService(InsightOrganisationUnitService organisationUnitService) {
+    public ATeamService(InsightOrganisationUnitService organisationUnitService, InsightEmployeeService employeeService) {
         this.organisationUnitService = organisationUnitService;
+        this.employeeService = employeeService;
     }
 
     public Double getScores(ATeamPair pair) {
@@ -23,7 +25,7 @@ public class ATeamService {
     }
 
 
-    public List<ATeam> calculateATeams(int nrOfTeamMembers, Location... locations) {
+    public List<ATeam> calculateATeams(int nrOfTeamMembers, List<Location> locations) {
         Map<ATeamPair, Double> allScores = new HashMap<>();
 
         List<OrganisationUnit> focusGroups = organisationUnitService.getFocusGroups();
@@ -46,6 +48,21 @@ public class ATeamService {
             aTeams.add(aTeam);
         }
 
+        int count = 0;
+        for (ATeam aTeam : aTeams) {
+            System.out.println("Team: " + count++);
+            for(int i = 0; i<nrOfTeamMembers -1; i++) {
+                for(int j= i+1; j<nrOfTeamMembers; j++) {
+                    Employee employee1 = aTeam.getTeamMembers().get(i).getEmployee();
+                    Employee employee2 = aTeam.getTeamMembers().get(j).getEmployee();
+                    double workedWithScore = employeeService.getWorkedWith(employee1.getCode(), employee2.getCode());
+                    aTeam.setScore(new Score(aTeam.getScore().getValue() + workedWithScore));
+                }
+            }
+            System.out.println("done!");
+        }
+
+        Collections.sort(aTeams);
         return aTeams;
     }
 
@@ -176,7 +193,7 @@ public class ATeamService {
         return combinedScores;
     }
 
-    Map<ATeamPair, Double> calculateScore(List<OrganisationUnit> organisationUnits, Location... locations) {
+    Map<ATeamPair, Double> calculateScore(List<OrganisationUnit> organisationUnits, List<Location> locations) {
         Map<ATeamPair, Double> scorePairs = new HashMap<>();
 
         for (OrganisationUnit organisationUnit : organisationUnits) {

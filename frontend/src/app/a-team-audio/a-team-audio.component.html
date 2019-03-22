@@ -1,3 +1,2 @@
-<p>
-  a-team-audio works!
-</p>
+<audio src="http://www.classictvhits.com/shows/sounds/Ateam_theme1-4.mp3" playsinline [autoplay]="play"
+  (load)="onLoad($event, audioControl)" #audioControl>

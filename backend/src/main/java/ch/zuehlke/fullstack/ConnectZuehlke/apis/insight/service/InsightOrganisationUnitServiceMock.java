@@ -30,7 +30,7 @@ public class InsightOrganisationUnitServiceMock implements InsightOrganisationUn
     }
 
     @Override
-    public List<Employee> getParticipantsInOrganisationUnit(String organisationUnitId, Location... locations) {
+    public List<Employee> getParticipantsInOrganisationUnit(String organisationUnitId, List<Location> locations) {
 
         return null;
     }

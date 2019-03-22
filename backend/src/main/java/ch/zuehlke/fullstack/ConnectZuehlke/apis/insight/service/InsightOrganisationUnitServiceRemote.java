@@ -12,14 +12,13 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -73,7 +72,7 @@ public class InsightOrganisationUnitServiceRemote implements InsightOrganisation
 
     @Cacheable("organisationUnitsParticipants")
     @Override
-    public List<Employee> getParticipantsInOrganisationUnit(String organisationUnitId, Location... locations) {
+    public List<Employee> getParticipantsInOrganisationUnit(String organisationUnitId, List<Location> locations) {
         ResponseEntity<List<GroupParticipant>> response = this.insightRestTemplate
                 .exchange(String.format("/organisationunits/%s/participants", organisationUnitId), GET, null, new ParameterizedTypeReference<List<GroupParticipant>>() {
                 });
@@ -84,24 +83,28 @@ public class InsightOrganisationUnitServiceRemote implements InsightOrganisation
                 .map(GroupParticipant::getEmployee)
                 .filter(this::hasNames)
                 .filter(this::isEngineer)
+                .filter(employee -> fromLocation(employee.getLocation(), locations))
                 .map(this::create)
                 .collect(toList());
 
     }
 
-    private boolean fromLocation(String location, Location... locations) {
+    boolean fromLocation(String employeeLocation, List<Location> locations) {
         if (locations == null) {
             return false;
         }
+        if (locations.isEmpty()) {
+            return true;
+        }
 
-        if (location == null) {
+        if (StringUtils.isEmpty(employeeLocation)) {
             return false;
         }
 
-        return Arrays.stream(locations)
+        return locations.stream()
                 .map(Location::getCityName)
                 .map(String::toLowerCase)
-                .anyMatch(l -> l.contains(location));
+                .anyMatch(l -> employeeLocation.toLowerCase().contains(l));
     }
 
     private boolean isEngineer(EmployeeDto employee) {
@@ -124,7 +127,8 @@ public class InsightOrganisationUnitServiceRemote implements InsightOrganisation
                 employeeDto.getLocation(),
                 null,
                 null,
-                employeeDto.getTitle());
+                employeeDto.getTitle(),
+                employeeDto.getCode());
     }
 
     private List<OrganisationUnit> getOrganisationUnits() {
