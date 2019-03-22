@@ -37,7 +37,7 @@ public class InsightEmployeeServiceMocked implements InsightEmployeeService {
     }
 
     @Override
-    public RelationshipData getRelationshipData() {
+    public RelationshipData getRelationshipData(String codes) {
         List<EmployeeNode> nodeList = new ArrayList<>();
         nodeList.add(new EmployeeNode(0, "Joshua ", "#b1a0e7"));
         nodeList.add(new EmployeeNode(1, "Daniel ", "#b1a0e7"));

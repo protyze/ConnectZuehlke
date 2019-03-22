@@ -5,10 +5,7 @@ import ch.zuehlke.fullstack.ConnectZuehlke.apis.insight.service.InsightEmployeeS
 import ch.zuehlke.fullstack.ConnectZuehlke.domain.Employee;
 import ch.zuehlke.fullstack.ConnectZuehlke.domain.RelationshipData;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -48,8 +45,8 @@ public class EmployeeRestController {
 
     @GetMapping(value = "/api/employee/relations")
     public @ResponseBody
-    RelationshipData getRelationshipData() {
-        return employeeService.getRelationshipData();
+    RelationshipData getRelationshipData(@RequestParam(value = "employees") String employees) {
+        return employeeService.getRelationshipData(employees);
     }
 
 }

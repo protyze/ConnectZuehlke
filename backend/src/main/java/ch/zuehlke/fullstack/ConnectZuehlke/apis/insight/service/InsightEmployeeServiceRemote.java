@@ -2,11 +2,7 @@ package ch.zuehlke.fullstack.ConnectZuehlke.apis.insight.service;
 
 import ch.zuehlke.fullstack.ConnectZuehlke.apis.insight.dto.EmployeeDto;
 import ch.zuehlke.fullstack.ConnectZuehlke.apis.insight.dto.EmployeeProjectDto;
-import ch.zuehlke.fullstack.ConnectZuehlke.domain.Employee;
-import ch.zuehlke.fullstack.ConnectZuehlke.domain.EmployeeNode;
-import ch.zuehlke.fullstack.ConnectZuehlke.domain.EmployeeRelationship;
-import ch.zuehlke.fullstack.ConnectZuehlke.domain.RelationshipData;
-import ch.zuehlke.fullstack.ConnectZuehlke.domain.EmployeeProject;
+import ch.zuehlke.fullstack.ConnectZuehlke.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.ParameterizedTypeReference;
@@ -28,12 +24,16 @@ import static org.springframework.http.HttpMethod.GET;
 @Service
 @Profile({"prod", "staging"})
 public class InsightEmployeeServiceRemote implements InsightEmployeeService {
+
     private final RestTemplate insightRestTemplate;
+    private final ATeamService ateamService;
 
 
     @Autowired
-    public InsightEmployeeServiceRemote(RestTemplate insightRestTemplate) {
+    public InsightEmployeeServiceRemote(RestTemplate insightRestTemplate,
+                                        ATeamService aTeamService) {
         this.insightRestTemplate = insightRestTemplate;
+        this.ateamService = aTeamService;
     }
 
     @Override
@@ -63,20 +63,53 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
     }
 
     @Override
-    public RelationshipData getRelationshipData() {
-        List<EmployeeNode> nodeList = new ArrayList<>();
-        nodeList.add(new EmployeeNode(0, "Joshua ", "#b1a0e7"));
-        nodeList.add(new EmployeeNode(1, "Daniel ", "#b1a0e7"));
-        nodeList.add(new EmployeeNode(2, "Robert ", "#b1a0e7"));
-        nodeList.add(new EmployeeNode(3, "Noah ", "#b1a0e7"));
-        nodeList.add(new EmployeeNode(4, "Anthony", "#b1a0e7"));
-        List<EmployeeRelationship>employeeRelations = new ArrayList<>();
-        employeeRelations.add(new EmployeeRelationship(0, 5, "#b1a0e7"));
-        employeeRelations.add(new EmployeeRelationship(2, 3, "#b1a0e7"));
-        employeeRelations.add(new EmployeeRelationship(1, 2, "#b1a0e7"));
-        employeeRelations.add(new EmployeeRelationship(2, 4, "#b1a0e7"));
-        employeeRelations.add(new EmployeeRelationship(1, 35, "#b1a0e7"));
-        return new RelationshipData(nodeList, employeeRelations);
+    public RelationshipData getRelationshipData(String codes) {
+        if (codes != null) {
+            // create EmployeeNode
+            List<EmployeeNode> employeeNodes = new ArrayList<>();
+            List<EmployeeRelationship> relationships = new ArrayList<>();
+
+            String[] split = codes.split(",");
+            for (int i = 0; i < split.length; i++) {
+                employeeNodes.add(new EmployeeNode(i, split[i].toLowerCase(), "#b1a0e7"));
+            }
+            // get employees to create ATeamPairs
+            List<Employee> employees = new ArrayList<>();
+            for(EmployeeNode node: employeeNodes) {
+                try {
+                    employees.add(getEmployee(node.getText()));
+                } catch (Exception e) {
+                    // do nothing...
+                }
+            }
+            // create all pairs
+            List<ATeamPair> aTeamPairs = new ArrayList<>();
+            for(Employee e1: employees) {
+                for(Employee e2: employees) {
+                    aTeamPairs.add(new ATeamPair(e1, e2));
+                }
+            }
+            // get scores for Pairs
+            for (ATeamPair currentPair: aTeamPairs) {
+                Double score = ateamService.getScores(currentPair);
+                EmployeeNode from =  getNodeFromList(currentPair.getE1().getCode(), employeeNodes);
+                EmployeeNode to =  getNodeFromList(currentPair.getE2().getCode(), employeeNodes);
+                if (to != null && score != null && from != null) {
+                    relationships.add(new EmployeeRelationship(from.getKey(), to.getKey(), score.toString()));
+                }
+            }
+            return new RelationshipData(employeeNodes, relationships);
+        }
+        return null;
+    }
+
+    EmployeeNode getNodeFromList(String code, List<EmployeeNode> nodes) {
+        for(EmployeeNode node: nodes) {
+            if (node.getText().toLowerCase().equals(code.toLowerCase())) {
+                return node;
+            }
+        }
+        return null;
     }
 
     @Override

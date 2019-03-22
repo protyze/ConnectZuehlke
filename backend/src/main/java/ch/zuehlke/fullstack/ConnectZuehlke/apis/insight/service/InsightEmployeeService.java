@@ -16,5 +16,5 @@ public interface InsightEmployeeService {
 
   double getWorkedWith(String code1, String code2);
 
-  RelationshipData getRelationshipData();
+  RelationshipData getRelationshipData(String codes);
 }

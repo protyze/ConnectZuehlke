@@ -11,9 +11,15 @@ public class ATeamService {
 
     private final InsightOrganisationUnitService organisationUnitService;
 
+    Map<ATeamPair, Double> allScoresCached = new HashMap<>();
+
     @Autowired
     public ATeamService(InsightOrganisationUnitService organisationUnitService) {
         this.organisationUnitService = organisationUnitService;
+    }
+
+    public Double getScores(ATeamPair pair) {
+        return this.allScoresCached.get(pair);
     }
 
 
@@ -22,15 +28,17 @@ public class ATeamService {
 
         List<OrganisationUnit> focusGroups = organisationUnitService.getFocusGroups();
 
-        Map<ATeamPair, Double> aTeamsByFocusGroup = calculateScore(focusGroups,locations);
+        Map<ATeamPair, Double> aTeamsByFocusGroup = calculateScore(focusGroups, locations);
 
         allScores.putAll(aTeamsByFocusGroup);
 
         List<OrganisationUnit> zuehlkeTeams = organisationUnitService.getTeams();
 
-        Map<ATeamPair, Double> aTeamsByZuehlkeTeam = calculateScore(zuehlkeTeams,locations);
+        Map<ATeamPair, Double> aTeamsByZuehlkeTeam = calculateScore(zuehlkeTeams, locations);
 
         allScores = combineValues(allScores, aTeamsByZuehlkeTeam);
+
+        cacheScores(allScores);
 
         ArrayList<ATeam> aTeams = new ArrayList<>();
         while (!allScores.isEmpty() && aTeams.size() <= 3) {
@@ -39,6 +47,11 @@ public class ATeamService {
         }
 
         return aTeams;
+    }
+
+    private void cacheScores(Map<ATeamPair, Double> allScores) {
+        allScoresCached.clear();
+        allScoresCached.putAll(allScores);
     }
 
     ATeam calculateTeam(int nrOfTeamMembers, Map<ATeamPair, Double> allScores) {
@@ -167,7 +180,7 @@ public class ATeamService {
         Map<ATeamPair, Double> scorePairs = new HashMap<>();
 
         for (OrganisationUnit organisationUnit : organisationUnits) {
-            List<Employee> employees = organisationUnitService.getParticipantsInOrganisationUnit(organisationUnit.getId(),locations);
+            List<Employee> employees = organisationUnitService.getParticipantsInOrganisationUnit(organisationUnit.getId(), locations);
             for (Employee e1 : employees) {
                 for (Employee e2 : employees) {
                     if (!e1.equals(e2)) {
