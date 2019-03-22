@@ -10,10 +10,12 @@ import java.util.*;
 public class ATeamService {
 
     private final InsightOrganisationUnitService organisationUnitService;
+    private InsightEmployeeService employeeService;
 
     @Autowired
-    public ATeamService(InsightOrganisationUnitService organisationUnitService) {
+    public ATeamService(InsightOrganisationUnitService organisationUnitService, InsightEmployeeService employeeService) {
         this.organisationUnitService = organisationUnitService;
+        this.employeeService = employeeService;
     }
 
 
@@ -32,12 +34,28 @@ public class ATeamService {
 
         allScores = combineValues(allScores, aTeamsByZuehlkeTeam);
 
+
         ArrayList<ATeam> aTeams = new ArrayList<>();
         while (!allScores.isEmpty() && aTeams.size() <= 3) {
             ATeam aTeam = calculateTeam(nrOfTeamMembers, allScores);
             aTeams.add(aTeam);
         }
 
+        int count = 0;
+        for (ATeam aTeam : aTeams) {
+            System.out.println("Team: " + count++);
+            for(int i = 0; i<nrOfTeamMembers -1; i++) {
+                for(int j= i+1; j<nrOfTeamMembers; j++) {
+                    Employee employee1 = aTeam.getTeamMembers().get(i).getEmployee();
+                    Employee employee2 = aTeam.getTeamMembers().get(j).getEmployee();
+                    double workedWithScore = employeeService.getWorkedWith(employee1.getCode(), employee2.getCode());
+                    aTeam.setScore(new Score(aTeam.getScore().getValue() + workedWithScore));
+                }
+            }
+            System.out.println("done!");
+        }
+
+        Collections.sort(aTeams);
         return aTeams;
     }
 
