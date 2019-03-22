@@ -11,8 +11,6 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -95,6 +93,35 @@ public class ATeamServiceTest {
         assertEquals(2, map.size());
         assertEquals(1.0, map.get(new ATeamPair(e1, e2)).doubleValue(), 0.0001);
         assertEquals(1.0, map.get(new ATeamPair(e3, e4)).doubleValue(), 0.0001);
+    }
+
+    @Test
+    public void calculateTeam() {
+
+        ATeamService aTeamService = new ATeamService(null);
+
+        HashMap<ATeamPair, Double> allScores = new HashMap<>();
+        Employee e1 = employee(1);
+        Employee e2 = employee(2);
+        Employee e3 = employee(3);
+        Employee e4 = employee(4);
+        Employee e5 = employee(5);
+        Employee e6 = employee(6);
+        Employee e7 = employee(7);
+        allScores.put(new ATeamPair(e1, e2), 3.0);
+        allScores.put(new ATeamPair(e1, e3), 2.0);
+        allScores.put(new ATeamPair(e1, e4), 1.0);
+        allScores.put(new ATeamPair(e2, e5), 2.0);
+        allScores.put(new ATeamPair(e2, e6), 1.0);
+        allScores.put(new ATeamPair(e2, e7), 1.0);
+        ATeam aTeam = aTeamService.calculateTeam(7, allScores);
+        assertEquals(7, aTeam.getTeamMembers().size());
+
+
+    }
+
+    private Employee employee(int id) {
+        return new Employee(id, "e" + id, "e" + id);
     }
 
     @Test

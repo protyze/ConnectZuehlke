@@ -62,7 +62,7 @@ public class ATeamService {
         return new ATeam(aTeamMembers, new Score(1.0));
     }
 
-    private List<ATeamMember> findNextPairs(Map<ATeamPair, Double> allScores, int numberOfFriends, Employee employee) {
+    List<ATeamMember> findNextPairs(Map<ATeamPair, Double> allScores, int numberOfFriends, Employee employee) {
 
         List<ATeamMember> teamMembers = new ArrayList<>();
         ATeamPair nextPair;
@@ -85,28 +85,8 @@ public class ATeamService {
         return teamMembers;
     }
 
-    private void getNextTeamMember(Map<ATeamPair, Double> allScores, List<ATeamMember> aTeamMembers, Employee employee, int numberOfTeamMembers) {
-        if (aTeamMembers.size() == numberOfTeamMembers / 2) {
-            return;
-        }
-        if (allScores.size() == 0) {
-            return;
-        }
-        ATeamPair nextPair = getNextBestPair(allScores, employee);
-        if (nextPair == null) {
-            return;
-        }
-        ATeamMember nextMember = getNextMemberNot(nextPair, employee);
-
-        if (!aTeamMembers.contains(nextMember)) {
-            aTeamMembers.add(nextMember);
-            allScores.remove(nextPair);
-            getNextTeamMember(allScores, aTeamMembers, nextMember.getEmployee(), numberOfTeamMembers);
-        }
-    }
-
     private ATeamPair getNextBestPair(Map<ATeamPair, Double> allScores, Employee employee) {
-        TreeMap<Double, ATeamPair> nextPairs = new TreeMap<>();
+        TreeMap<Double, ATeamPair> nextPairs = new TreeMap<>(Comparator.reverseOrder());
         for (Map.Entry<ATeamPair, Double> aTeamPair : allScores.entrySet()) {
             ATeamPair nextPair = aTeamPair.getKey();
             if (employee.equals(nextPair.getE1()) || employee.equals(nextPair.getE2())) {
@@ -131,7 +111,7 @@ public class ATeamService {
     }
 
     private ATeamPair findPairWithHighestScore(Map<ATeamPair, Double> allScores) {
-        TreeMap<Double, ATeamPair> scoreMap = new TreeMap<>();
+        TreeMap<Double, ATeamPair> scoreMap = new TreeMap<>(Comparator.reverseOrder());
         for (Map.Entry<ATeamPair, Double> teamToScore : allScores.entrySet()) {
             scoreMap.put(teamToScore.getValue(), teamToScore.getKey());
         }
