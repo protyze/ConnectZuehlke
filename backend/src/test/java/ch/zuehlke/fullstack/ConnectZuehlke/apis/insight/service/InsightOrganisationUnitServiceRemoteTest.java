@@ -26,5 +26,9 @@ public class InsightOrganisationUnitServiceRemoteTest {
 
         actual = orgUnit.fromLocation("sofia", Arrays.asList(Location.Sofia, Location.Schlieren, Location.New_Belgrade));
         assertTrue(actual);
+
+        actual = orgUnit.fromLocation("sofia", Collections.emptyList());
+        assertTrue(actual);
+
     }
 }

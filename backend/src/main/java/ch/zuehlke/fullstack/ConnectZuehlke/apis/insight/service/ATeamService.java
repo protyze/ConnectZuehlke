@@ -10,10 +10,12 @@ import java.util.*;
 public class ATeamService {
 
     private final InsightOrganisationUnitService organisationUnitService;
+    private InsightEmployeeService employeeService;
 
     @Autowired
-    public ATeamService(InsightOrganisationUnitService organisationUnitService) {
+    public ATeamService(InsightOrganisationUnitService organisationUnitService, InsightEmployeeService employeeService) {
         this.organisationUnitService = organisationUnitService;
+        this.employeeService = employeeService;
     }
 
 
@@ -22,15 +24,16 @@ public class ATeamService {
 
         List<OrganisationUnit> focusGroups = organisationUnitService.getFocusGroups();
 
-        Map<ATeamPair, Double> aTeamsByFocusGroup = calculateScore(focusGroups,locations);
+        Map<ATeamPair, Double> aTeamsByFocusGroup = calculateScore(focusGroups, locations);
 
         allScores.putAll(aTeamsByFocusGroup);
 
         List<OrganisationUnit> zuehlkeTeams = organisationUnitService.getTeams();
 
-        Map<ATeamPair, Double> aTeamsByZuehlkeTeam = calculateScore(zuehlkeTeams,locations);
+        Map<ATeamPair, Double> aTeamsByZuehlkeTeam = calculateScore(zuehlkeTeams, locations);
 
         allScores = combineValues(allScores, aTeamsByZuehlkeTeam);
+
 
         ArrayList<ATeam> aTeams = new ArrayList<>();
         while (!allScores.isEmpty() && aTeams.size() <= 3) {
@@ -38,6 +41,21 @@ public class ATeamService {
             aTeams.add(aTeam);
         }
 
+//        int count = 0;
+//        for (ATeam aTeam : aTeams) {
+//            System.out.println("Team: " + count++);
+//            for (int i = 0; i < nrOfTeamMembers - 1; i++) {
+//                for (int j = i + 1; j < nrOfTeamMembers; j++) {
+//                    Employee employee1 = aTeam.getTeamMembers().get(i).getEmployee();
+//                    Employee employee2 = aTeam.getTeamMembers().get(j).getEmployee();
+//                    double workedWithScore = employeeService.getWorkedWith(employee1.getCode(), employee2.getCode());
+//                    aTeam.setScore(new Score(aTeam.getScore().getValue() + workedWithScore));
+//                }
+//            }
+//            System.out.println("done!");
+//        }
+//
+//        Collections.sort(aTeams);
         return aTeams;
     }
 
@@ -49,8 +67,8 @@ public class ATeamService {
         allScores.remove(pairWithHighestScore);
 
         List<ATeamMember> allTeamMembers = new ArrayList<>();
-        allTeamMembers.add(new ATeamMember(pairWithHighestScore.getE1()));
-        allTeamMembers.add(new ATeamMember(pairWithHighestScore.getE2()));
+        allTeamMembers.add(new ATeamMember(pairWithHighestScore.getE1(), pairWithHighestScore.getFocusGroup(), pairWithHighestScore.getZuehlkeTeam()));
+        allTeamMembers.add(new ATeamMember(pairWithHighestScore.getE2(), pairWithHighestScore.getFocusGroup(), pairWithHighestScore.getZuehlkeTeam()));
         int newNumberOfTeamMembers = nrOfTeamMembers - 2;
 
         int firstEmployeeNumberOfFriends = newNumberOfTeamMembers / 2;
@@ -85,6 +103,8 @@ public class ATeamService {
             } while (allTeamMembers.contains(nextMember));
 
             if (!teamMembers.contains(nextMember)) {
+                nextMember.setFocusGroups(new FocusGroup(nextPair.getFocusGroup()));
+                nextMember.setZuehlkeTeam(new ZuehlkeTeam(nextPair.getZuehlkeTeam()));
                 teamMembers.add(nextMember);
                 allScores.remove(nextPair);
             }
@@ -167,12 +187,20 @@ public class ATeamService {
         Map<ATeamPair, Double> scorePairs = new HashMap<>();
 
         for (OrganisationUnit organisationUnit : organisationUnits) {
-            List<Employee> employees = organisationUnitService.getParticipantsInOrganisationUnit(organisationUnit.getId(),locations);
+            List<Employee> employees = organisationUnitService.getParticipantsInOrganisationUnit(organisationUnit.getId(), locations);
             for (Employee e1 : employees) {
                 for (Employee e2 : employees) {
                     if (!e1.equals(e2)) {
                         ATeamPair pair = new ATeamPair(e1, e2);
                         ATeamPair pair2 = new ATeamPair(e2, e1);
+
+                        if (organisationUnit.isFocusGroup()) {
+                            pair.setFocusGroup(organisationUnit.getName());
+                            pair2.setFocusGroup(organisationUnit.getName());
+                        } else if (organisationUnit.isTeam()) {
+                            pair.setZuehlkeTeam(organisationUnit.getName());
+                            pair2.setZuehlkeTeam(organisationUnit.getName());
+                        }
                         if (scorePairs.containsKey(pair) || scorePairs.containsKey(pair2)) {
                             Double val1 = scorePairs.get(pair);
                             Double val2 = scorePairs.get(pair2);
