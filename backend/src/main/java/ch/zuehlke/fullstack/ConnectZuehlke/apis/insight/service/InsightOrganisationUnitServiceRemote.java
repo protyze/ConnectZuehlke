@@ -128,7 +128,8 @@ public class InsightOrganisationUnitServiceRemote implements InsightOrganisation
                 employeeDto.getLocation(),
                 null,
                 null,
-                employeeDto.getTitle());
+                employeeDto.getTitle(),
+                employeeDto.getCode());
     }
 
     private List<OrganisationUnit> getOrganisationUnits() {

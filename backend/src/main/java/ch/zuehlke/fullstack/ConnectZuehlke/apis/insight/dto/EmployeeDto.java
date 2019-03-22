@@ -67,7 +67,8 @@ public class EmployeeDto {
                 getLocation(),
                 getJobProfileDto() == null ? new JobProfile("") : getJobProfileDto().toJobProfile(),
                 getEntryDate().toLocalDate(),
-                getTitle());
+                getTitle(),
+                getCode());
     }
 
 }
