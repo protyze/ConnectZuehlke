@@ -26,11 +26,14 @@ export class TeamComponent implements OnInit {
   }
 
   getSimilarityIndicators() {
-    return ['Software Engineer', 'UX Design', 'Zühlke'];
-    /*return this.team.teamMembers.map((empl) => (empl ? [
-      ...(empl.focusGroups ? empl.focusGroups : []),
-      empl.unit
-    ] : [])).reduce((acc, val) => acc.concat(val), []);*/
+    // return ['Software Engineer', 'UX Design', 'Zühlke'];
+    return this.team.teamMembers.map((empl) => (empl ? [
+      (empl.focusGroups ? empl.focusGroups.name : ''),
+      (empl.zuehlkeTeam ? empl.zuehlkeTeam.teamName : ''),
+      (empl.employee && empl.employee.location ? empl.employee.location : '')
+    ] : []))
+      .reduce((acc, val) => acc.concat(val), [])
+      .reduce((unionAcc, el) => (el && unionAcc.indexOf(el) === -1 ? [...unionAcc, el] : unionAcc), []);
   }
 
 }
