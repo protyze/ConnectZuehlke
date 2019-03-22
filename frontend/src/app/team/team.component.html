@@ -17,6 +17,13 @@
       </mat-button-toggle-group>
     </div>
   </div>
+  <div class="row mt-3">
+    <div class="col">
+      <mat-chip-list>
+        <mat-chip *ngFor="let similarity of getSimilarityIndicators()" color="accent">{{similarity}}</mat-chip>
+      </mat-chip-list>
+    </div>
+  </div>
   <div class="row">
     <div class="col">
       <div class="row mt-3" *ngIf="display === availableDisplays.Team">

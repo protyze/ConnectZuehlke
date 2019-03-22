@@ -28,7 +28,8 @@ import {
   MatCardModule,
   MatGridListModule,
   MatButtonToggleModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatChipsModule
 } from '@angular/material';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { NavigationComponent } from './navigation/navigation.component';
@@ -96,6 +97,7 @@ library.add(faAngular);
     MatGridListModule,
     MatButtonToggleModule,
     MatProgressBarModule,
+    MatChipsModule,
     AgmCoreModule.forRoot({ apiKey: 'AIzaSyBrgp24CvFV3M0PZGByVDVEG0qn56k8Y-g' }),
     NgMultiSelectDropDownModule.forRoot()
   ],
