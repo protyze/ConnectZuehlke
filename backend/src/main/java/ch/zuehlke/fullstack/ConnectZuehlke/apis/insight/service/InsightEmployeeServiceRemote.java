@@ -90,6 +90,7 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
 
         } catch (Exception e) {
             System.out.println("fuck");
+            return null;
         }
 
         return response.getBody().toEmployee();
@@ -102,6 +103,9 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
 
         Employee employee1 = getEmployee(code1);
         Employee employee2 = getEmployee(code2);
+        if(employee1 == null || employee2 == null) {
+            return 0.0;
+        }
 
         List<EmployeeProject> projects1 = getCustomerProjects(response1);
         List<EmployeeProject> projects2 = getCustomerProjects(response2);
