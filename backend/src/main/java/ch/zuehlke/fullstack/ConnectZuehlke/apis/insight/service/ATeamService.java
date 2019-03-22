@@ -50,7 +50,7 @@ public class ATeamService {
 
         int count = 0;
         for (ATeam aTeam : aTeams) {
-            System.out.println("Team: " + count++);
+            //System.out.println("Team: " + count++);
             for (int i = 0; i < nrOfTeamMembers - 1; i++) {
                 for (int j = i + 1; j < nrOfTeamMembers; j++) {
                     Employee employee1 = aTeam.getTeamMembers().get(i).getEmployee();
@@ -59,7 +59,7 @@ public class ATeamService {
                     aTeam.setScore(new Score(aTeam.getScore().getValue() + workedWithScore * 3));
                 }
             }
-            System.out.println("done!");
+            // System.out.println("done!");
         }
 
         Collections.sort(aTeams);

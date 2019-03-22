@@ -121,12 +121,12 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
         }
         ResponseEntity<EmployeeDto> response = null;
         try{
-            System.out.println("Try get Employee with code " + code);
+            // System.out.println("Try get Employee with code " + code);
             response = this.insightRestTemplate
                     .getForEntity("/employees/" + code, EmployeeDto.class);
 
         } catch (Exception e) {
-            System.out.println("fuck");
+            //System.out.println("fuck");
             return null;
         }
 
@@ -184,7 +184,7 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
         if(employeeProjects.get(code1) != null) {
             return employeeProjects.get(code1);
         }
-        System.out.println("Get Employee Projects of " + code1);
+        // System.out.println("Get Employee Projects of " + code1);
         ResponseEntity<List<EmployeeProjectDto>> responseEntity = this.insightRestTemplate
                 .exchange("/employees/" + code1 + "/projects/history", GET, null, new ParameterizedTypeReference<List<EmployeeProjectDto>>() {
                 });
