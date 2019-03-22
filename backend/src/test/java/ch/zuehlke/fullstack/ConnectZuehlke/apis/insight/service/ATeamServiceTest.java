@@ -16,6 +16,7 @@ public class ATeamServiceTest {
     @Test
     public void calculateATeams() {
         InsightOrganisationUnitService orgServiceMock = mock(InsightOrganisationUnitService.class);
+        InsightEmployeeService employeeServiceMock = mock(InsightEmployeeService.class);
 
         when(orgServiceMock.getFocusGroups()).thenReturn(Arrays.asList(
                 new OrganisationUnit("1", "focus group 1", 1, null),
@@ -56,7 +57,7 @@ public class ATeamServiceTest {
         Employee e5 = new Employee(5, "e5f", "e5l");
         when(orgServiceMock.getParticipantsInOrganisationUnit("4", new ArrayList<>())).thenReturn(Arrays.asList(e5, e4));
 
-        ATeamService aTeamService = new ATeamService(orgServiceMock);
+        ATeamService aTeamService = new ATeamService(orgServiceMock, employeeServiceMock);
 
         List<ATeam> actualATeams = aTeamService.calculateATeams(3, null);
 
@@ -69,6 +70,7 @@ public class ATeamServiceTest {
     @Test
     public void calculateATeamsOrganisationUnitsTest() {
         InsightOrganisationUnitService orgServiceMock = mock(InsightOrganisationUnitService.class);
+        InsightEmployeeService employeeServiceMock = mock(InsightEmployeeService.class);
 
         when(orgServiceMock.getFocusGroups()).thenReturn(Arrays.asList(
                 new OrganisationUnit("1", "focus group 1", 3, null),
@@ -83,7 +85,7 @@ public class ATeamServiceTest {
         when(orgServiceMock.getParticipantsInOrganisationUnit("1", new ArrayList<>())).thenReturn(Arrays.asList(e1, e2));
         when(orgServiceMock.getParticipantsInOrganisationUnit("2", new ArrayList<>())).thenReturn(Arrays.asList(e3, e4));
 
-        ATeamService aTeamService = new ATeamService(orgServiceMock);
+        ATeamService aTeamService = new ATeamService(orgServiceMock, employeeServiceMock);
 
         Map<ATeamPair, Double> map = aTeamService.calculateScore(orgServiceMock.getFocusGroups(), new ArrayList<>());
 
@@ -95,7 +97,7 @@ public class ATeamServiceTest {
     @Test
     public void calculateTeam() {
 
-        ATeamService aTeamService = new ATeamService(null);
+        ATeamService aTeamService = new ATeamService(null, null);
 
         HashMap<ATeamPair, Double> allScores = new HashMap<>();
         Employee e1 = employee(1);
@@ -124,6 +126,7 @@ public class ATeamServiceTest {
     @Test
     public void calculateATeamsOrganisationUnitsTest1() {
         InsightOrganisationUnitService orgServiceMock = mock(InsightOrganisationUnitService.class);
+        InsightEmployeeService employeeServiceMock = mock(InsightEmployeeService.class);
 
         when(orgServiceMock.getFocusGroups()).thenReturn(Arrays.asList(
                 new OrganisationUnit("1", "focus group 1", 3, null),
@@ -138,7 +141,7 @@ public class ATeamServiceTest {
         when(orgServiceMock.getParticipantsInOrganisationUnit("1", new ArrayList<>())).thenReturn(Arrays.asList(e1, e2, e3));
         when(orgServiceMock.getParticipantsInOrganisationUnit("2", new ArrayList<>())).thenReturn(Arrays.asList(e1, e3, e4));
 
-        ATeamService aTeamService = new ATeamService(orgServiceMock);
+        ATeamService aTeamService = new ATeamService(orgServiceMock, employeeServiceMock);
 
 //        Map<ATeamPair, Double> map = aTeamService.calculateTeam(4, );
 
@@ -161,7 +164,7 @@ public class ATeamServiceTest {
         Employee e2 = new Employee(2, "e2f", "e2l");
         Employee e3 = new Employee(3, "e3f", "e3l");
         Employee e4 = new Employee(4, "e4f", "e4l");
-        ATeamService aTeamService = new ATeamService(null);
+        ATeamService aTeamService = new ATeamService(null, null);
         HashMap<ATeamPair, Double> first = new HashMap<>();
         HashMap<ATeamPair, Double> second = new HashMap<>();
         first.put(new ATeamPair(e1, e2), 1.0);

@@ -2,24 +2,16 @@ package ch.zuehlke.fullstack.ConnectZuehlke.apis.insight.service;
 
 import ch.zuehlke.fullstack.ConnectZuehlke.apis.insight.dto.EmployeeDto;
 import ch.zuehlke.fullstack.ConnectZuehlke.apis.insight.dto.EmployeeProjectDto;
-import ch.zuehlke.fullstack.ConnectZuehlke.domain.Employee;
-import ch.zuehlke.fullstack.ConnectZuehlke.domain.EmployeeNode;
-import ch.zuehlke.fullstack.ConnectZuehlke.domain.EmployeeRelationship;
-import ch.zuehlke.fullstack.ConnectZuehlke.domain.RelationshipData;
-import ch.zuehlke.fullstack.ConnectZuehlke.domain.EmployeeProject;
+import ch.zuehlke.fullstack.ConnectZuehlke.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.time.temporal.ChronoUnit.DAYS;
@@ -30,6 +22,9 @@ import static org.springframework.http.HttpMethod.GET;
 @Profile({"prod", "staging"})
 public class InsightEmployeeServiceRemote implements InsightEmployeeService {
     private final RestTemplate insightRestTemplate;
+
+    Map<String, Employee> employees = new HashMap<>();
+    Map<String, ResponseEntity<List<EmployeeProjectDto>>> employeeProjects = new HashMap<>();
 
 
     @Autowired
@@ -81,10 +76,13 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
     }
 
     @Override
-    @Cacheable("employee")
     public Employee getEmployee(String code) {
+        if(employees.get(code) != null) {
+            return employees.get(code);
+        }
         ResponseEntity<EmployeeDto> response = null;
         try{
+            System.out.println("Try get Employee with code " + code);
             response = this.insightRestTemplate
                     .getForEntity("/employees/" + code, EmployeeDto.class);
 
@@ -93,7 +91,9 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
             return null;
         }
 
-        return response.getBody().toEmployee();
+        Employee employee = response.getBody().toEmployee();
+        employees.put(code, employee);
+        return employee;
     }
 
     @Override
@@ -141,11 +141,16 @@ public class InsightEmployeeServiceRemote implements InsightEmployeeService {
         return ((double) daysTogether)/(0.5 * (days1 + days2));
     }
 
-    @Cacheable("project")
     public ResponseEntity<List<EmployeeProjectDto>> getEmployeeProjects(String code1) {
-        return this.insightRestTemplate
+        if(employeeProjects.get(code1) != null) {
+            return employeeProjects.get(code1);
+        }
+        System.out.println("Get Employee Projects of " + code1);
+        ResponseEntity<List<EmployeeProjectDto>> responseEntity = this.insightRestTemplate
                 .exchange("/employees/" + code1 + "/projects/history", GET, null, new ParameterizedTypeReference<List<EmployeeProjectDto>>() {
                 });
+        employeeProjects.put(code1, responseEntity);
+        return responseEntity;
     }
 
     private List<EmployeeProject> getCustomerProjects(ResponseEntity<List<EmployeeProjectDto>> response1) {
