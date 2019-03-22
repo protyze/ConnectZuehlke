@@ -44,7 +44,7 @@ public class InsightOrganisationUnitServiceRemote implements InsightOrganisation
     }
 
     @Override
-    @Cacheable("organisationUnits")
+    @Cacheable("focusGroups")
     public List<OrganisationUnit> getFocusGroups() {
         List<OrganisationUnit> list = getOrganisationUnits();
         return list.stream()
